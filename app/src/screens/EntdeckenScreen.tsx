@@ -1,11 +1,12 @@
-import React, { useMemo, useState } from 'react';
-import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../theme/colors';
 import { fonts } from '../theme/fonts';
-import { BUSINESSES, CRIT, NEIGHBORHOOD_ORDER } from '../data/constants';
-import { CritKey } from '../data/types';
+import { CRIT, NEIGHBORHOOD_ORDER } from '../data/constants';
+import { fetchBusinesses } from '../data/businesses';
+import { Business, CritKey } from '../data/types';
 import { EntdeckenStackParamList } from '../navigation/types';
 import { ArchImage } from '../components/ArchImage';
 import { SearchIcon } from '../components/Icons';
@@ -17,26 +18,47 @@ const CRIT_KEYS = Object.keys(CRIT) as CritKey[];
 export function EntdeckenScreen({ navigation }: Props) {
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<Record<CritKey, boolean>>({ founded: false, ownership: false, leadership: false });
+  // null = wird noch aus der Datenbank geladen
+  const [businesses, setBusinesses] = useState<Business[] | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    fetchBusinesses().then((list) => {
+      if (active) setBusinesses(list);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const toggleFilter = (k: CritKey) => setFilters((f) => ({ ...f, [k]: !f[k] }));
 
   const groups = useMemo(() => {
+    const all = businesses ?? [];
     const activeFilters = CRIT_KEYS.filter((k) => filters[k]);
     const q = query.trim().toLowerCase();
-    let list = BUSINESSES.filter((b) => activeFilters.every((k) => b.crit[k]));
+    let list = all.filter((b) => activeFilters.every((k) => b.crit[k]));
     if (q) list = list.filter((b) => `${b.name} ${b.category} ${b.neighborhood}`.toLowerCase().includes(q));
 
-    return NEIGHBORHOOD_ORDER.map((n) => {
-      const items = list
-        .filter((b) => b.neighborhood === n)
-        .map((b) => {
-          const verified = CRIT_KEYS.filter((k) => b.crit[k]);
-          const verifLabel = verified.length === 3 ? 'Voll verifiziert' : CRIT[verified[0]].short;
-          return { ...b, verifLabel };
-        });
-      return { neighborhood: n, count: `${items.length} ${items.length === 1 ? 'Ort' : 'Orte'}`, items };
-    }).filter((g) => g.items.length > 0);
-  }, [query, filters]);
+    // bekannte Reihenfolge zuerst, dann evtl. neue Stadtteile aus der Datenbank
+    const extra = list.map((b) => b.neighborhood).filter((n) => !NEIGHBORHOOD_ORDER.includes(n));
+    const order = [...NEIGHBORHOOD_ORDER, ...Array.from(new Set(extra))];
+
+    return order
+      .map((n) => {
+        const items = list
+          .filter((b) => b.neighborhood === n)
+          .map((b) => {
+            const verified = CRIT_KEYS.filter((k) => b.crit[k]);
+            const verifLabel = verified.length === 3 ? 'Voll verifiziert' : CRIT[verified[0]].short;
+            return { ...b, verifLabel };
+          });
+        return { neighborhood: n, count: `${items.length} ${items.length === 1 ? 'Ort' : 'Orte'}`, items };
+      })
+      .filter((g) => g.items.length > 0);
+  }, [query, filters, businesses]);
+
+  const loading = businesses === null;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={['top']}>
@@ -92,6 +114,12 @@ export function EntdeckenScreen({ navigation }: Props) {
       </ScrollView>
 
       <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 24 }}>
+        {loading && (
+          <View style={{ alignItems: 'center', paddingVertical: 48, gap: 12 }}>
+            <ActivityIndicator color={colors.purple} />
+            <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 14, color: colors.mutedLight }}>Lädt aus der Datenbank …</Text>
+          </View>
+        )}
         {groups.map((g) => (
           <View key={g.neighborhood} style={{ marginTop: 14 }}>
             <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 9, paddingBottom: 4 }}>
@@ -127,7 +155,7 @@ export function EntdeckenScreen({ navigation }: Props) {
             ))}
           </View>
         ))}
-        {groups.length === 0 && (
+        {!loading && groups.length === 0 && (
           <Text style={{ textAlign: 'center', paddingVertical: 40, paddingHorizontal: 20, fontFamily: fonts.hanken400, fontSize: 14, color: colors.mutedLight }}>
             Keine Treffer mit diesen Filtern.
           </Text>
