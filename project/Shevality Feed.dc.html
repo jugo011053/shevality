@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Young+Serif&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#ece7e0;font-family:'Hanken Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .dv-turn{padding:40px 44px 34px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}
+  .dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 6px}
+  .dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#221c2a;color:#fff;border-radius:4px;text-decoration:none}
+  .dv-tname{font:600 13px/1.2 system-ui,sans-serif;color:#221c2a}
+  .dv-tsub{font:400 12.5px/1.5 system-ui,sans-serif;color:rgba(0,0,0,.5);margin:0 0 24px;max-width:620px}
+  .dv-opts{display:flex;flex-wrap:wrap;gap:34px;align-items:flex-start}
+  .dv-opt{flex:none;display:flex;flex-direction:column;gap:11px;scroll-margin-top:16px}
+  .dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#221c2a;border-radius:5px;text-decoration:none}
+  .dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11.5px/1.35 system-ui,sans-serif;color:rgba(0,0,0,.55);max-width:360px}
+  .dv-olabel b{color:#221c2a;font-weight:600}
+  .dv-opt:target .dv-oid{background:#7b5fb8;color:#fff}
+  .dv-next{margin:26px 0 0;font:12.5px/1.6 system-ui,sans-serif;color:rgba(0,0,0,.5)}
+  .dv-intro{padding:42px 44px 8px;max-width:760px}
+  .dv-intro h1{font:500 30px/1.1 'Newsreader',serif;color:#221c2a;margin:0 0 12px;letter-spacing:-.01em}
+  .dv-intro p{font:400 14px/1.6 system-ui,sans-serif;color:rgba(0,0,0,.62);margin:0 0 10px}
+  .dv-intro .sys{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .dv-intro .sys span{font:500 11.5px ui-monospace,Menlo,monospace;padding:5px 10px;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:99px;color:#4a4150}
+</style>
+</helmet>
+
+<section class="dv-intro">
+  <h1>Shevality — Feed</h1>
+  <p>Vier visuelle Richtungen für den Startbildschirm. Gemeinsame Basis: warmer, bestärkender Ton, vertrauenswürdig, dezente aber klare Verifikation (✓). Erste Stadt Frankfurt. Wähle eine Richtung (oder mische Details daraus), dann baue ich den klickbaren Prototyp mit Feed, Entdecken & Sicher.</p>
+  <div class="sys">
+    <span>Flieder + blasses Rosa</span><span>Newsreader / Hanken Grotesk</span><span>Tabs: Feed · Entdecken · Sicher</span><span>iPhone</span>
+  </div>
+</section>
+
+<section class="dv-turn" id="t3">
+  <div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">Weniger generisch — redaktionell statt Karten-Stapel</span></div>
+  <p class="dv-tsub">Neue Display-Schrift mit Charakter (Young Serif) und Schluss mit „weißen Boxen auf Rosa". Inhalt sitzt direkt auf der Fläche: vollflächige Bilder, feine Linien, asymmetrische Komposition. Das Torbogen-Motiv und die dezente Verifikation bleiben.</p>
+  <div class="dv-opts">
+
+    <!-- ============ 3a EDITORIAL PAGE ============ -->
+    <div class="dv-opt" id="3a">
+      <div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a><span><b>Redaktionelle Seite.</b> Keine Karten — vollflächiges Aufmacherbild, Schlagzeile direkt auf der Fläche, feine Linien trennen die Beiträge.</span></div>
+      <div style="width:360px;height:760px;border-radius:46px;border:10px solid #2b2230;box-shadow:0 22px 50px rgba(70,40,60,.24);overflow:hidden;position:relative;display:flex;flex-direction:column;background:#f5e6ea;font-family:'Hanken Grotesk',system-ui,sans-serif">
+        <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:94px;height:26px;background:#2b2230;border-radius:14px;z-index:6"></div>
+        <div style="height:50px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 28px 0 30px;color:#382a3d;font-size:14px;font-weight:600">
+          <span>9:41</span>
+          <div style="display:flex;align-items:center;gap:5px">
+            <div style="display:flex;align-items:flex-end;gap:2px;height:11px"><div style="width:3px;height:5px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:7px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:9px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:11px;background:#382a3d;border-radius:1px"></div></div>
+            <div style="width:15px;height:11px;border:1.5px solid #382a3d;border-radius:3px;position:relative"><div style="position:absolute;inset:1.5px;width:7px;background:#382a3d;border-radius:1px"></div></div>
+          </div>
+        </div>
+        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+          <div style="padding:4px 22px 14px;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid rgba(56,42,61,.13)">
+            <div style="font:400 23px/1 'Young Serif',serif;color:#382a3d;letter-spacing:-.01em">shevality</div>
+            <div style="display:flex;align-items:center;gap:9px"><span style="font:500 12px 'Hanken Grotesk',sans-serif;color:#a86b88;letter-spacing:.02em">Frankfurt</span><span style="width:31px;height:31px;border-radius:50%;background:#e9c4d0;display:flex;align-items:center;justify-content:center;color:#a3567a;font:600 12px 'Hanken Grotesk',sans-serif">M</span></div>
+          </div>
+          <div style="flex:1;overflow:hidden">
+            <div style="height:268px;background:repeating-linear-gradient(135deg,#decad6,#decad6 8px,#ebd9e2 8px,#ebd9e2 16px);position:relative">
+              <div style="position:absolute;left:18px;bottom:14px;background:rgba(245,230,234,.94);padding:5px 11px;font:700 10px 'Hanken Grotesk',sans-serif;letter-spacing:.16em;color:#9a4a6e">NORDEND · NEU</div>
+            </div>
+            <div style="padding:18px 22px 0">
+              <div style="font:400 28px/1.12 'Young Serif',serif;color:#382a3d;letter-spacing:-.01em">Drei Schwestern rösten jetzt im Nordend</div>
+              <div style="font:400 14px/1.5 'Hanken Grotesk',sans-serif;color:#7c6c76;margin-top:11px">Die Rösterei „Drei Bohnen" ist frauengeführt — und seit dieser Woche geprüft.</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:14px;padding-bottom:18px;border-bottom:1px solid rgba(56,42,61,.13)">
+                <span style="width:17px;height:17px;border-radius:50%;border:1.4px solid #7b5fb8;display:flex;align-items:center;justify-content:center;color:#7b5fb8;font-size:9px">✓</span>
+                <span style="font:500 11.5px 'Hanken Grotesk',sans-serif;color:#7b5fb8;letter-spacing:.02em">Verifiziert · gegründet von einer Frau</span>
+                <span style="font:400 11.5px 'Hanken Grotesk',sans-serif;color:#b29aa6;margin-left:auto">vor 2 Std</span>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:14px;padding-top:16px">
+                <div style="flex:1">
+                  <div style="font:400 19px/1.2 'Young Serif',serif;color:#382a3d">10 Jahre Buchladen am Bornheimer Hang</div>
+                  <div style="font:400 11.5px 'Hanken Grotesk',sans-serif;color:#b29aa6;margin-top:8px">Bornheim · gestern</div>
+                </div>
+                <div style="width:70px;height:70px;flex:none;background:repeating-linear-gradient(135deg,#decad6,#decad6 8px,#ebd9e2 8px,#ebd9e2 16px)"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="height:74px;flex:none;display:flex;align-items:flex-start;justify-content:space-around;padding:11px 14px 0;background:#fbf2f5;border-top:1px solid rgba(120,60,90,.1)">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#7b5fb8"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="3" rx="1.5" fill="currentColor"/><rect x="4" y="11" width="16" height="2.4" rx="1.2" fill="currentColor"/><rect x="4" y="16" width="11" height="2.4" rx="1.2" fill="currentColor"/></svg><span style="font:700 10.5px 'Hanken Grotesk',sans-serif">Feed</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#c3aec0"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.2" stroke="currentColor" stroke-width="2.1"/><line x1="15.6" y1="15.6" x2="19.5" y2="19.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Entdecken</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#c3aec0"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 3.2 19 6v6.2c0 4.3-2.9 7-7 8.6-4.1-1.6-7-4.3-7-8.6V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Sicher</span></div>
+        </div>
+        <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:#2b2230;opacity:.8;z-index:6"></div>
+      </div>
+    </div>
+
+    <!-- ============ 3b COVER STACK ============ -->
+    <div class="dv-opt" id="3b">
+      <div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a><span><b>Cover-Stapel.</b> Jede Geschichte ist ein vollflächiges Bild mit Titel darüber — kein Kasten. Immersiv, man scrollt durch „Titelseiten".</span></div>
+      <div style="width:360px;height:760px;border-radius:46px;border:10px solid #1c1622;box-shadow:0 22px 50px rgba(40,25,55,.3);overflow:hidden;position:relative;display:flex;flex-direction:column;background:#1f1828;font-family:'Hanken Grotesk',system-ui,sans-serif">
+        <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:94px;height:26px;background:#000;border-radius:14px;z-index:6"></div>
+        <div style="position:absolute;top:0;left:0;right:0;z-index:5;height:96px;background:linear-gradient(to bottom,rgba(20,12,28,.55),rgba(20,12,28,0))">
+          <div style="height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 28px 0 30px;color:#fff;font-size:14px;font-weight:600">
+            <span>9:41</span>
+            <div style="display:flex;align-items:center;gap:5px">
+              <div style="display:flex;align-items:flex-end;gap:2px;height:11px"><div style="width:3px;height:5px;background:#fff;border-radius:1px"></div><div style="width:3px;height:7px;background:#fff;border-radius:1px"></div><div style="width:3px;height:9px;background:#fff;border-radius:1px"></div><div style="width:3px;height:11px;background:#fff;border-radius:1px"></div></div>
+              <div style="width:15px;height:11px;border:1.5px solid #fff;border-radius:3px;position:relative"><div style="position:absolute;inset:1.5px;width:7px;background:#fff;border-radius:1px"></div></div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 22px 0">
+            <div style="font:400 21px/1 'Young Serif',serif;color:#fff;letter-spacing:-.01em">shevality</div>
+            <span style="font:500 12px 'Hanken Grotesk',sans-serif;color:rgba(255,255,255,.82);letter-spacing:.02em">Frankfurt</span>
+          </div>
+        </div>
+        <div style="flex:1;overflow:hidden">
+          <div style="height:452px;position:relative;background:repeating-linear-gradient(135deg,#7e5f93,#7e5f93 9px,#8d6ba2 9px,#8d6ba2 18px)">
+            <div style="position:absolute;left:0;right:0;bottom:0;padding:78px 22px 24px;background:linear-gradient(to top,rgba(26,16,34,.9),rgba(26,16,34,.1))">
+              <div style="display:flex;align-items:center;gap:7px;margin-bottom:11px">
+                <span style="font:700 10px 'Hanken Grotesk',sans-serif;letter-spacing:.16em;color:#f0c5d6">NORDEND · NEU</span>
+                <span style="width:15px;height:15px;border-radius:50%;border:1.3px solid rgba(255,255,255,.75);display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px">✓</span>
+              </div>
+              <div style="font:400 30px/1.08 'Young Serif',serif;color:#fff;letter-spacing:-.01em">Drei Schwestern rösten jetzt im Nordend</div>
+              <div style="font:400 13px/1.45 'Hanken Grotesk',sans-serif;color:rgba(255,255,255,.78);margin-top:9px">Rösterei „Drei Bohnen" · frauengeführt &amp; geprüft</div>
+            </div>
+          </div>
+          <div style="height:452px;position:relative;background:repeating-linear-gradient(135deg,#a36c84,#a36c84 9px,#b27c94 9px,#b27c94 18px)">
+            <div style="position:absolute;left:0;right:0;top:0;padding:22px 22px 60px;background:linear-gradient(to bottom,rgba(26,16,34,.55),rgba(26,16,34,0))">
+              <span style="font:700 10px 'Hanken Grotesk',sans-serif;letter-spacing:.16em;color:#f0c5d6">BORNHEIM</span>
+              <div style="font:400 26px/1.1 'Young Serif',serif;color:#fff;letter-spacing:-.01em;margin-top:9px">10 Jahre Buchladen am Bornheimer Hang</div>
+            </div>
+          </div>
+        </div>
+        <div style="height:74px;flex:none;display:flex;align-items:flex-start;justify-content:space-around;padding:11px 14px 0;background:#171020;border-top:1px solid rgba(255,255,255,.08)">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#d9c2ea"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="3" rx="1.5" fill="currentColor"/><rect x="4" y="11" width="16" height="2.4" rx="1.2" fill="currentColor"/><rect x="4" y="16" width="11" height="2.4" rx="1.2" fill="currentColor"/></svg><span style="font:700 10.5px 'Hanken Grotesk',sans-serif">Feed</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#6f6080"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.2" stroke="currentColor" stroke-width="2.1"/><line x1="15.6" y1="15.6" x2="19.5" y2="19.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Entdecken</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#6f6080"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 3.2 19 6v6.2c0 4.3-2.9 7-7 8.6-4.1-1.6-7-4.3-7-8.6V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Sicher</span></div>
+        </div>
+        <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:#fff;opacity:.55;z-index:6"></div>
+      </div>
+    </div>
+
+    <!-- ============ 3c ART-DIRECTED ============ -->
+    <div class="dv-opt" id="3c">
+      <div class="dv-olabel"><a class="dv-oid" href="#3c">3c</a><span><b>Art-Directed.</b> Asymmetrisch: Torbogen-Foto läuft über den Rand, Schlagzeile wickelt sich darum, große Ziffern als Rhythmus. Wie ein gestaltetes Plakat.</span></div>
+      <div style="width:360px;height:760px;border-radius:46px;border:10px solid #2b2230;box-shadow:0 22px 50px rgba(70,40,60,.24);overflow:hidden;position:relative;display:flex;flex-direction:column;background:#f4e4e8;font-family:'Hanken Grotesk',system-ui,sans-serif">
+        <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:94px;height:26px;background:#2b2230;border-radius:14px;z-index:6"></div>
+        <div style="height:50px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 28px 0 30px;color:#382a3d;font-size:14px;font-weight:600">
+          <span>9:41</span>
+          <div style="display:flex;align-items:center;gap:5px">
+            <div style="display:flex;align-items:flex-end;gap:2px;height:11px"><div style="width:3px;height:5px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:7px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:9px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:11px;background:#382a3d;border-radius:1px"></div></div>
+            <div style="width:15px;height:11px;border:1.5px solid #382a3d;border-radius:3px;position:relative"><div style="position:absolute;inset:1.5px;width:7px;background:#382a3d;border-radius:1px"></div></div>
+          </div>
+        </div>
+        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+          <div style="padding:6px 22px 0;display:flex;align-items:center;justify-content:space-between">
+            <div style="font:400 22px/1 'Young Serif',serif;color:#382a3d;letter-spacing:-.01em">shevality</div>
+            <div style="font:400 13px 'Instrument Serif',serif;font-style:italic;color:#a86b88">Donnerstag</div>
+          </div>
+          <div style="position:relative;margin-top:18px;flex:1;overflow:hidden">
+            <div style="position:absolute;top:0;right:-26px;width:208px;height:268px;border-radius:104px 104px 16px 16px;background:repeating-linear-gradient(135deg,#dcc4d2,#dcc4d2 8px,#e8d4de 8px,#e8d4de 16px)"></div>
+            <div style="position:absolute;top:30px;left:22px;width:172px">
+              <div style="font:700 10px 'Hanken Grotesk',sans-serif;letter-spacing:.16em;color:#9a4a6e">NORDEND · NEU</div>
+              <div style="font:400 35px/1.04 'Young Serif',serif;color:#382a3d;letter-spacing:-.015em;margin-top:12px">Drei Schwestern rösten</div>
+            </div>
+            <div style="position:absolute;top:296px;left:22px;right:22px">
+              <div style="font:400 28px/1.04 'Young Serif',serif;color:#382a3d;letter-spacing:-.015em">im Nordend</div>
+              <div style="font:400 13.5px/1.5 'Hanken Grotesk',sans-serif;color:#7c6c76;margin-top:13px;max-width:280px">Die Rösterei „Drei Bohnen" ist frauengeführt — und seit dieser Woche geprüft.</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:14px">
+                <span style="width:17px;height:17px;border-radius:50%;border:1.4px solid #7b5fb8;display:flex;align-items:center;justify-content:center;color:#7b5fb8;font-size:9px">✓</span>
+                <span style="font:500 11.5px 'Hanken Grotesk',sans-serif;color:#7b5fb8">Verifiziert</span>
+                <span style="font:400 11.5px 'Hanken Grotesk',sans-serif;color:#b29aa6;margin-left:auto">vor 2 Std</span>
+              </div>
+            </div>
+            <div style="position:absolute;left:22px;right:22px;bottom:6px;display:flex;align-items:center;gap:14px;border-top:1px solid rgba(56,42,61,.14);padding-top:13px">
+              <div style="font:400 30px/1 'Young Serif',serif;color:#d3a9bb">02</div>
+              <div style="flex:1">
+                <div style="font:400 16px/1.18 'Young Serif',serif;color:#382a3d">10 Jahre Buchladen am Bornheimer Hang</div>
+                <div style="font:400 11px 'Hanken Grotesk',sans-serif;color:#b29aa6;margin-top:5px">Bornheim · gestern</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="height:74px;flex:none;display:flex;align-items:flex-start;justify-content:space-around;padding:11px 14px 0;background:#fbf2f5;border-top:1px solid rgba(120,60,90,.1)">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#7b5fb8"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="3" rx="1.5" fill="currentColor"/><rect x="4" y="11" width="16" height="2.4" rx="1.2" fill="currentColor"/><rect x="4" y="16" width="11" height="2.4" rx="1.2" fill="currentColor"/></svg><span style="font:700 10.5px 'Hanken Grotesk',sans-serif">Feed</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#c3aec0"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.2" stroke="currentColor" stroke-width="2.1"/><line x1="15.6" y1="15.6" x2="19.5" y2="19.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Entdecken</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#c3aec0"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 3.2 19 6v6.2c0 4.3-2.9 7-7 8.6-4.1-1.6-7-4.3-7-8.6V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Sicher</span></div>
+        </div>
+        <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:#2b2230;opacity:.8;z-index:6"></div>
+      </div>
+    </div>
+
+  </div>
+  <p class="dv-next">Sag mir z.&nbsp;B.: „Bau den Prototyp mit <a class="dv-oid" href="#3a">3a</a>" · „<a class="dv-oid" href="#3c">3c</a>, aber heller" · „<a class="dv-oid" href="#3b">3b</a> in warm statt dunkel" · oder „andere Schrift testen".</p>
+</section>
+
+<section class="dv-turn" id="t2">
+  <div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Vertiefung von <a class="dv-oid" href="#1b">1b</a> — mehr Charakter</span></div>
+  <p class="dv-tsub">Gleiche DNA (blasses Rosa, rund, nahbar), aber mit eigener Handschrift: ein „she"-betontes Wortbild, Serifen-Schlagzeilen für Wärme, die Torbogen-Form als wiederkehrendes Motiv (Schaufenster/Eingang), ein Verifikations-Siegel statt generischem Häkchen, und sichtbare Prüf-Kriterien.</p>
+  <div class="dv-opts">
+
+    <!-- ============ 2a EDITORIAL SOFT ============ -->
+    <div class="dv-opt" id="2a">
+      <div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a><span><b>Editorial-soft.</b> „she"-Wortbild, Serifen-Schlagzeilen, Torbogen-Foto, Siegel + Prüf-Chips. Wärmstes Aubergine-Ink.</span></div>
+      <div style="width:360px;height:760px;border-radius:46px;border:10px solid #2b2230;box-shadow:0 22px 50px rgba(70,40,60,.24);overflow:hidden;position:relative;display:flex;flex-direction:column;background:#f8eaee;font-family:'Hanken Grotesk',system-ui,sans-serif">
+        <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:94px;height:26px;background:#2b2230;border-radius:14px;z-index:6"></div>
+        <div style="height:50px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 28px 0 30px;color:#382a3d;font-size:14px;font-weight:600">
+          <span>9:41</span>
+          <div style="display:flex;align-items:center;gap:5px">
+            <div style="display:flex;align-items:flex-end;gap:2px;height:11px"><div style="width:3px;height:5px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:7px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:9px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:11px;background:#382a3d;border-radius:1px"></div></div>
+            <div style="width:15px;height:11px;border:1.5px solid #382a3d;border-radius:3px;position:relative"><div style="position:absolute;inset:1.5px;width:7px;background:#382a3d;border-radius:1px"></div></div>
+          </div>
+        </div>
+        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+          <div style="padding:6px 22px 12px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font:700 25px/1 'Hanken Grotesk',sans-serif;letter-spacing:-.025em"><span style="color:#9a7fc8">she</span><span style="color:#382a3d">vality</span></div>
+              <div style="width:36px;height:36px;border-radius:50%;background:#efd0da;display:flex;align-items:center;justify-content:center;color:#a3567a;font:600 13px 'Hanken Grotesk',sans-serif">M</div>
+            </div>
+            <div style="margin-top:13px;height:42px;border-radius:21px;background:#fff;display:flex;align-items:center;gap:9px;padding:0 16px;border:1px solid #f0dbe2">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.2" stroke="#bfa0bb" stroke-width="2.1"/><line x1="15.6" y1="15.6" x2="19.5" y2="19.5" stroke="#bfa0bb" stroke-width="2.1" stroke-linecap="round"/></svg>
+              <span style="font:400 13.5px 'Hanken Grotesk',sans-serif;color:#b495a4">In Frankfurt entdecken…</span>
+            </div>
+          </div>
+          <div style="padding:4px 22px 16px;flex:1;overflow:hidden">
+            <div style="background:#fff;border-radius:26px;padding:12px;box-shadow:0 8px 24px rgba(120,60,90,.09);margin-bottom:15px">
+              <div style="position:relative">
+                <div style="height:170px;border-radius:110px 110px 14px 14px;background:repeating-linear-gradient(135deg,#ecd4dd,#ecd4dd 7px,#f4e1e8 7px,#f4e1e8 14px);display:flex;align-items:flex-end;padding:11px;font:500 9.5px ui-monospace,Menlo,monospace;color:#c69aab"></div>
+                <div style="position:absolute;top:12px;right:12px;width:48px;height:48px;border-radius:50%;background:#fff;box-shadow:0 3px 11px rgba(80,40,70,.16);display:flex;align-items:center;justify-content:center">
+                  <div style="width:38px;height:38px;border-radius:50%;border:1.4px solid #9a7fc8;display:flex;align-items:center;justify-content:center;color:#7b5fb8;font-size:15px">✓</div>
+                </div>
+              </div>
+              <div style="padding:13px 7px 5px">
+                <div style="font:700 10.5px 'Hanken Grotesk',sans-serif;letter-spacing:.13em;color:#a3567a">NORDEND · NEU</div>
+                <div style="font:500 21px/1.18 'Newsreader',serif;color:#382a3d;margin-top:7px;letter-spacing:-.01em">Drei Schwestern rösten jetzt im Nordend</div>
+                <div style="font:400 13px/1.45 'Hanken Grotesk',sans-serif;color:#8a7984;margin-top:7px">Die Rösterei „Drei Bohnen" ist frauengeführt — und seit dieser Woche geprüft.</div>
+                <div style="display:flex;gap:7px;margin-top:12px;flex-wrap:wrap">
+                  <span style="font:600 10.5px 'Hanken Grotesk',sans-serif;color:#7b5fb8;background:#efe7f7;border-radius:99px;padding:5px 10px">✓ Gegründet von einer Frau</span>
+                  <span style="font:600 10.5px 'Hanken Grotesk',sans-serif;color:#7b5fb8;background:#efe7f7;border-radius:99px;padding:5px 10px">✓ In Frauenbesitz</span>
+                </div>
+              </div>
+            </div>
+            <div style="background:#fff;border-radius:24px;padding:13px;display:flex;gap:13px;align-items:center;box-shadow:0 6px 20px rgba(120,60,90,.07)">
+              <div style="width:74px;height:74px;flex:none;border-radius:44px 44px 16px 16px;background:repeating-linear-gradient(135deg,#ecd4dd,#ecd4dd 7px,#f4e1e8 7px,#f4e1e8 14px)"></div>
+              <div style="flex:1">
+                <div style="font:500 17px/1.2 'Newsreader',serif;color:#382a3d;letter-spacing:-.005em">10 Jahre Buchladen am Bornheimer Hang</div>
+                <div style="font:400 11.5px 'Hanken Grotesk',sans-serif;color:#b495a4;margin-top:6px">Bornheim · gestern</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="height:74px;flex:none;display:flex;align-items:flex-start;justify-content:space-around;padding:11px 14px 0;background:#fff;border-top:1px solid rgba(120,60,90,.08)">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#7b5fb8"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="3" rx="1.5" fill="currentColor"/><rect x="4" y="11" width="16" height="2.4" rx="1.2" fill="currentColor"/><rect x="4" y="16" width="11" height="2.4" rx="1.2" fill="currentColor"/></svg><span style="font:700 10.5px 'Hanken Grotesk',sans-serif">Feed</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#c3aec0"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.2" stroke="currentColor" stroke-width="2.1"/><line x1="15.6" y1="15.6" x2="19.5" y2="19.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Entdecken</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#c3aec0"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 3.2 19 6v6.2c0 4.3-2.9 7-7 8.6-4.1-1.6-7-4.3-7-8.6V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Sicher</span></div>
+        </div>
+        <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:#2b2230;opacity:.8;z-index:6"></div>
+      </div>
+    </div>
+
+    <!-- ============ 2b MAGAZINE ============ -->
+    <div class="dv-opt" id="2b">
+      <div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a><span><b>Magazin.</b> „Heute"-Masthead in Serifen-Kursiv, großes Bild mit überlagertem Titel, redaktionelle Liste mit feinen Linien.</span></div>
+      <div style="width:360px;height:760px;border-radius:46px;border:10px solid #2b2230;box-shadow:0 22px 50px rgba(70,40,60,.24);overflow:hidden;position:relative;display:flex;flex-direction:column;background:#f8eaee;font-family:'Hanken Grotesk',system-ui,sans-serif">
+        <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:94px;height:26px;background:#2b2230;border-radius:14px;z-index:6"></div>
+        <div style="height:50px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 28px 0 30px;color:#382a3d;font-size:14px;font-weight:600">
+          <span>9:41</span>
+          <div style="display:flex;align-items:center;gap:5px">
+            <div style="display:flex;align-items:flex-end;gap:2px;height:11px"><div style="width:3px;height:5px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:7px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:9px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:11px;background:#382a3d;border-radius:1px"></div></div>
+            <div style="width:15px;height:11px;border:1.5px solid #382a3d;border-radius:3px;position:relative"><div style="position:absolute;inset:1.5px;width:7px;background:#382a3d;border-radius:1px"></div></div>
+          </div>
+        </div>
+        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+          <div style="padding:4px 22px 14px;display:flex;align-items:flex-end;justify-content:space-between">
+            <div>
+              <div style="font:700 13px 'Hanken Grotesk',sans-serif;letter-spacing:-.02em"><span style="color:#9a7fc8">she</span><span style="color:#382a3d">vality</span></div>
+              <div style="font:400 34px/.95 'Instrument Serif',serif;color:#382a3d;margin-top:6px">Heute <span style="font-style:italic;color:#9a7fc8">in&nbsp;Frankfurt</span></div>
+            </div>
+            <div style="font:400 11px 'Hanken Grotesk',sans-serif;color:#b495a4;text-align:right;padding-bottom:4px">Do.<br>30. Juni</div>
+          </div>
+          <div style="padding:0 22px;flex:1;overflow:hidden">
+            <div style="position:relative;border-radius:26px;overflow:hidden;box-shadow:0 8px 26px rgba(120,60,90,.13);margin-bottom:16px">
+              <div style="height:262px;background:repeating-linear-gradient(135deg,#dcc7d6,#dcc7d6 7px,#e9d8e4 7px,#e9d8e4 14px)"></div>
+              <div style="position:absolute;top:13px;left:13px;background:rgba(255,255,255,.92);border-radius:99px;padding:5px 11px;display:flex;align-items:center;gap:6px;font:700 10.5px 'Hanken Grotesk',sans-serif;color:#7b5fb8"><span style="width:14px;height:14px;border-radius:50%;border:1.3px solid #7b5fb8;display:flex;align-items:center;justify-content:center;font-size:8px">✓</span>VERIFIZIERT</div>
+              <div style="position:absolute;left:0;right:0;bottom:0;padding:46px 16px 16px;background:linear-gradient(to top,rgba(44,26,40,.82),rgba(44,26,40,0))">
+                <div style="font:700 10.5px 'Hanken Grotesk',sans-serif;letter-spacing:.13em;color:#f0c9d6">NORDEND</div>
+                <div style="font:500 23px/1.16 'Newsreader',serif;color:#fff;margin-top:5px;letter-spacing:-.01em">Drei Schwestern rösten jetzt im Nordend</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:13px;padding:2px 0 14px;border-bottom:1px solid rgba(56,42,61,.12)">
+              <div style="flex:1">
+                <div style="font:700 9.5px 'Hanken Grotesk',sans-serif;letter-spacing:.12em;color:#a3567a">BORNHEIM</div>
+                <div style="font:500 16px/1.2 'Newsreader',serif;color:#382a3d;margin-top:4px;letter-spacing:-.005em">10 Jahre Buchladen am Bornheimer Hang</div>
+              </div>
+              <div style="width:62px;height:62px;flex:none;border-radius:14px;background:repeating-linear-gradient(135deg,#ecd4dd,#ecd4dd 7px,#f4e1e8 7px,#f4e1e8 14px)"></div>
+            </div>
+          </div>
+        </div>
+        <div style="height:74px;flex:none;display:flex;align-items:flex-start;justify-content:space-around;padding:11px 14px 0;background:#fff;border-top:1px solid rgba(120,60,90,.08)">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#7b5fb8"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="3" rx="1.5" fill="currentColor"/><rect x="4" y="11" width="16" height="2.4" rx="1.2" fill="currentColor"/><rect x="4" y="16" width="11" height="2.4" rx="1.2" fill="currentColor"/></svg><span style="font:700 10.5px 'Hanken Grotesk',sans-serif">Feed</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#c3aec0"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.2" stroke="currentColor" stroke-width="2.1"/><line x1="15.6" y1="15.6" x2="19.5" y2="19.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Entdecken</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#c3aec0"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 3.2 19 6v6.2c0 4.3-2.9 7-7 8.6-4.1-1.6-7-4.3-7-8.6V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Sicher</span></div>
+        </div>
+        <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:#2b2230;opacity:.8;z-index:6"></div>
+      </div>
+    </div>
+
+    <!-- ============ 2c WARM TWO-TONE ============ -->
+    <div class="dv-opt" id="2c">
+      <div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a><span><b>Warm-zweifarbig.</b> Flieder trifft Terrakotta-Rosa, ein Bogen-Motiv als Markenzeichen, Karten mit seitlichem Akzent.</span></div>
+      <div style="width:360px;height:760px;border-radius:46px;border:10px solid #2b2230;box-shadow:0 22px 50px rgba(70,40,60,.24);overflow:hidden;position:relative;display:flex;flex-direction:column;background:#f7e9ec;font-family:'Hanken Grotesk',system-ui,sans-serif">
+        <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:94px;height:26px;background:#2b2230;border-radius:14px;z-index:6"></div>
+        <div style="height:50px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 28px 0 30px;color:#382a3d;font-size:14px;font-weight:600">
+          <span>9:41</span>
+          <div style="display:flex;align-items:center;gap:5px">
+            <div style="display:flex;align-items:flex-end;gap:2px;height:11px"><div style="width:3px;height:5px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:7px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:9px;background:#382a3d;border-radius:1px"></div><div style="width:3px;height:11px;background:#382a3d;border-radius:1px"></div></div>
+            <div style="width:15px;height:11px;border:1.5px solid #382a3d;border-radius:3px;position:relative"><div style="position:absolute;inset:1.5px;width:7px;background:#382a3d;border-radius:1px"></div></div>
+          </div>
+        </div>
+        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+          <div style="padding:6px 22px 14px;position:relative">
+            <div style="position:absolute;top:-6px;right:18px;width:60px;height:30px;border:7px solid #e3b9aa;border-bottom:none;border-radius:60px 60px 0 0"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font:700 24px/1 'Hanken Grotesk',sans-serif;letter-spacing:-.025em"><span style="color:#9a7fc8">she</span><span style="color:#382a3d">vality</span></div>
+              <div style="width:36px;height:36px;border-radius:50%;background:#e3b9aa;display:flex;align-items:center;justify-content:center;color:#9a4a36;font:600 13px 'Hanken Grotesk',sans-serif">M</div>
+            </div>
+            <div style="font:400 15px 'Instrument Serif',serif;font-style:italic;color:#a86b56;margin-top:10px">Frankfurt · Donnerstag</div>
+          </div>
+          <div style="padding:0 22px 16px;flex:1;overflow:hidden">
+            <div style="background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 8px 22px rgba(120,60,90,.09);margin-bottom:14px;display:flex">
+              <div style="width:7px;flex:none;background:#9a7fc8"></div>
+              <div style="flex:1;padding:13px 15px 15px">
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                  <div style="font:700 10.5px 'Hanken Grotesk',sans-serif;letter-spacing:.12em;color:#a86b56">NORDEND · NEU</div>
+                  <div style="width:26px;height:26px;border-radius:50%;border:1.4px solid #9a7fc8;display:flex;align-items:center;justify-content:center;color:#7b5fb8;font-size:12px">✓</div>
+                </div>
+                <div style="font:600 18px/1.2 'Hanken Grotesk',sans-serif;color:#382a3d;margin-top:8px;letter-spacing:-.015em">Drei Schwestern rösten jetzt im Nordend</div>
+                <div style="height:118px;border-radius:62px 62px 14px 14px;background:repeating-linear-gradient(135deg,#ecd4dd,#ecd4dd 7px,#f4e1e8 7px,#f4e1e8 14px);margin-top:12px"></div>
+                <div style="font:400 12.5px 'Hanken Grotesk',sans-serif;color:#9b8893;margin-top:11px">Rösterei „Drei Bohnen" · frauengeführt &amp; geprüft</div>
+              </div>
+            </div>
+            <div style="background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 6px 18px rgba(120,60,90,.07);display:flex">
+              <div style="width:7px;flex:none;background:#e3b9aa"></div>
+              <div style="flex:1;padding:13px;display:flex;gap:12px;align-items:center">
+                <div style="width:58px;height:58px;flex:none;border-radius:30px 30px 12px 12px;background:repeating-linear-gradient(135deg,#ecd4dd,#ecd4dd 7px,#f4e1e8 7px,#f4e1e8 14px)"></div>
+                <div style="flex:1">
+                  <div style="font:600 15px/1.2 'Hanken Grotesk',sans-serif;color:#382a3d;letter-spacing:-.01em">10 Jahre Buchladen am Bornheimer Hang</div>
+                  <div style="font:400 11.5px 'Hanken Grotesk',sans-serif;color:#a86b56;margin-top:6px">Bornheim · gestern</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="height:74px;flex:none;display:flex;align-items:flex-start;justify-content:space-around;padding:11px 14px 0;background:#fff;border-top:1px solid rgba(120,60,90,.08)">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#7b5fb8"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="3" rx="1.5" fill="currentColor"/><rect x="4" y="11" width="16" height="2.4" rx="1.2" fill="currentColor"/><rect x="4" y="16" width="11" height="2.4" rx="1.2" fill="currentColor"/></svg><span style="font:700 10.5px 'Hanken Grotesk',sans-serif">Feed</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#c3aec0"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.2" stroke="currentColor" stroke-width="2.1"/><line x1="15.6" y1="15.6" x2="19.5" y2="19.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Entdecken</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#c3aec0"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 3.2 19 6v6.2c0 4.3-2.9 7-7 8.6-4.1-1.6-7-4.3-7-8.6V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Sicher</span></div>
+        </div>
+        <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:#2b2230;opacity:.8;z-index:6"></div>
+      </div>
+    </div>
+
+  </div>
+  <p class="dv-next">Sag mir z.&nbsp;B.: „Bau den Prototyp mit <a class="dv-oid" href="#2a">2a</a>" · „<a class="dv-oid" href="#2b">2b</a>, aber Karten wie <a class="dv-oid" href="#2c">2c</a>" · „Torbogen-Motiv stärker" · oder „noch mutiger".</p>
+</section>
+
+<section class="dv-turn" id="t1">
+  <div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Feed — vier Richtungen</span></div>
+  <p class="dv-tsub">Inhalt ist überall gleich (erfundene Frankfurter Beispiele, leicht austauschbar) — es variiert nur das visuelle System.</p>
+  <div class="dv-opts">
+
+    <!-- ============ 1a EDITORIAL WARM ============ -->
+    <div class="dv-opt" id="1a">
+      <div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a><span><b>Editorial &amp; warm.</b> Creme, Serifen-Schlagzeilen, magazinartig. Ruhig, redaktionell, vertrauenswürdig.</span></div>
+      <div style="width:360px;height:760px;border-radius:46px;border:10px solid #211b27;box-shadow:0 22px 50px rgba(45,33,60,.24);overflow:hidden;position:relative;display:flex;flex-direction:column;background:#f7f1e8;font-family:'Hanken Grotesk',system-ui,sans-serif">
+        <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:94px;height:26px;background:#211b27;border-radius:14px;z-index:6"></div>
+        <div style="height:50px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 28px 0 30px;color:#2a2330;font-size:14px;font-weight:600">
+          <span>9:41</span>
+          <div style="display:flex;align-items:center;gap:5px">
+            <div style="display:flex;align-items:flex-end;gap:2px;height:11px"><div style="width:3px;height:5px;background:#2a2330;border-radius:1px"></div><div style="width:3px;height:7px;background:#2a2330;border-radius:1px"></div><div style="width:3px;height:9px;background:#2a2330;border-radius:1px"></div><div style="width:3px;height:11px;background:#2a2330;border-radius:1px"></div></div>
+            <div style="width:15px;height:11px;border:1.5px solid #2a2330;border-radius:3px;position:relative"><div style="position:absolute;inset:1.5px;width:7px;background:#2a2330;border-radius:1px"></div></div>
+          </div>
+        </div>
+        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+          <div style="padding:6px 24px 14px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font:400 13px/1 'Hanken Grotesk',sans-serif;color:#8a7d6a;letter-spacing:.02em">Frankfurt · Guten Morgen</div>
+              <div style="width:34px;height:34px;border-radius:50%;background:repeating-linear-gradient(135deg,#e3d6c0,#e3d6c0 5px,#ece1cf 5px,#ece1cf 10px)"></div>
+            </div>
+            <div style="font:500 30px/1 'Newsreader',serif;color:#2a2330;letter-spacing:-.015em;margin-top:8px">Shevality</div>
+          </div>
+          <div style="padding:0 24px 16px;flex:1;overflow:hidden">
+            <div style="margin-bottom:18px">
+              <div style="height:172px;border-radius:14px;background:repeating-linear-gradient(135deg,#e6d9c4,#e6d9c4 7px,#efe4d2 7px,#efe4d2 14px);display:flex;align-items:flex-end;padding:11px;font:500 10px ui-monospace,Menlo,monospace;color:#a3927a">Foto · Rösterei Nordend</div>
+              <div style="display:flex;align-items:center;gap:7px;margin-top:13px">
+                <div style="font:600 11px 'Hanken Grotesk',sans-serif;letter-spacing:.12em;color:#7c5fa6">NEU VERIFIZIERT</div>
+                <div style="width:15px;height:15px;border-radius:50%;background:#7c5fa6;color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px">✓</div>
+              </div>
+              <div style="font:500 21px/1.18 'Newsreader',serif;color:#2a2330;margin-top:6px;letter-spacing:-.01em">Drei Schwestern rösten jetzt im Nordend</div>
+              <div style="font:400 13.5px/1.45 'Hanken Grotesk',sans-serif;color:#6c6356;margin-top:6px">Die Kaffeerösterei „Drei Bohnen" ist frauengeführt — und seit dieser Woche geprüft.</div>
+              <div style="font:400 12px 'Hanken Grotesk',sans-serif;color:#a0937f;margin-top:8px">Nordend · vor 2 Std</div>
+            </div>
+            <div style="height:1px;background:rgba(42,35,48,.1);margin-bottom:18px"></div>
+            <div style="display:flex;gap:14px">
+              <div style="flex:1">
+                <div style="font:500 18px/1.2 'Newsreader',serif;color:#2a2330;letter-spacing:-.01em">10 Jahre Buchladen am Bornheimer Hang</div>
+                <div style="font:400 12px 'Hanken Grotesk',sans-serif;color:#a0937f;margin-top:7px">Bornheim · gestern</div>
+              </div>
+              <div style="width:88px;height:72px;flex:none;border-radius:11px;background:repeating-linear-gradient(135deg,#e6d9c4,#e6d9c4 7px,#efe4d2 7px,#efe4d2 14px)"></div>
+            </div>
+          </div>
+        </div>
+        <div style="height:74px;flex:none;display:flex;align-items:flex-start;justify-content:space-around;padding:11px 14px 0;border-top:1px solid rgba(42,35,48,.1);background:#fbf7f0">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#7c5fa6"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="3" rx="1.5" fill="currentColor"/><rect x="4" y="11" width="16" height="2.4" rx="1.2" fill="currentColor"/><rect x="4" y="16" width="11" height="2.4" rx="1.2" fill="currentColor"/></svg><span style="font:600 10.5px 'Hanken Grotesk',sans-serif">Feed</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#a89e8e"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.2" stroke="currentColor" stroke-width="2.1"/><line x1="15.6" y1="15.6" x2="19.5" y2="19.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Entdecken</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#a89e8e"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 3.2 19 6v6.2c0 4.3-2.9 7-7 8.6-4.1-1.6-7-4.3-7-8.6V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Sicher</span></div>
+        </div>
+        <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:#211b27;opacity:.8;z-index:6"></div>
+      </div>
+    </div>
+
+    <!-- ============ 1b SOFT ROUNDED ============ -->
+    <div class="dv-opt" id="1b">
+      <div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a><span><b>Soft &amp; rund.</b> Blasses Rosa, weiche Karten, freundliche Sans, Such-Pille. Nahbar und bestärkend.</span></div>
+      <div style="width:360px;height:760px;border-radius:46px;border:10px solid #2b2230;box-shadow:0 22px 50px rgba(70,40,60,.24);overflow:hidden;position:relative;display:flex;flex-direction:column;background:#faedf0;font-family:'Hanken Grotesk',system-ui,sans-serif">
+        <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:94px;height:26px;background:#2b2230;border-radius:14px;z-index:6"></div>
+        <div style="height:50px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 28px 0 30px;color:#3a2c33;font-size:14px;font-weight:600">
+          <span>9:41</span>
+          <div style="display:flex;align-items:center;gap:5px">
+            <div style="display:flex;align-items:flex-end;gap:2px;height:11px"><div style="width:3px;height:5px;background:#3a2c33;border-radius:1px"></div><div style="width:3px;height:7px;background:#3a2c33;border-radius:1px"></div><div style="width:3px;height:9px;background:#3a2c33;border-radius:1px"></div><div style="width:3px;height:11px;background:#3a2c33;border-radius:1px"></div></div>
+            <div style="width:15px;height:11px;border:1.5px solid #3a2c33;border-radius:3px;position:relative"><div style="position:absolute;inset:1.5px;width:7px;background:#3a2c33;border-radius:1px"></div></div>
+          </div>
+        </div>
+        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+          <div style="padding:6px 22px 12px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font:700 24px/1 'Hanken Grotesk',sans-serif;color:#3a2c33;letter-spacing:-.02em">Shevality</div>
+              <div style="width:36px;height:36px;border-radius:50%;background:#efd0da;display:flex;align-items:center;justify-content:center;color:#a3567a;font:600 13px 'Hanken Grotesk',sans-serif">M</div>
+            </div>
+            <div style="margin-top:13px;height:42px;border-radius:21px;background:#fff;display:flex;align-items:center;gap:9px;padding:0 16px;box-shadow:0 2px 10px rgba(120,60,90,.07)">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.2" stroke="#b58fae" stroke-width="2.1"/><line x1="15.6" y1="15.6" x2="19.5" y2="19.5" stroke="#b58fae" stroke-width="2.1" stroke-linecap="round"/></svg>
+              <span style="font:400 13.5px 'Hanken Grotesk',sans-serif;color:#b09aa6">In Frankfurt entdecken…</span>
+            </div>
+          </div>
+          <div style="padding:4px 22px 16px;flex:1;overflow:hidden">
+            <div style="background:#fff;border-radius:26px;overflow:hidden;box-shadow:0 6px 20px rgba(120,60,90,.08);margin-bottom:15px">
+              <div style="height:158px;background:repeating-linear-gradient(135deg,#f0d6dd,#f0d6dd 7px,#f6e1e7 7px,#f6e1e7 14px);display:flex;align-items:flex-start;justify-content:flex-end;padding:11px">
+                <div style="background:rgba(255,255,255,.92);border-radius:99px;padding:5px 10px;display:flex;align-items:center;gap:5px;font:600 11px 'Hanken Grotesk',sans-serif;color:#8b5ea8"><span style="width:13px;height:13px;border-radius:50%;background:#8b5ea8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:8px">✓</span>Verifiziert</div>
+              </div>
+              <div style="padding:14px 16px 17px">
+                <div style="font:600 11px 'Hanken Grotesk',sans-serif;letter-spacing:.1em;color:#a98fd0">NEU IM NORDEND</div>
+                <div style="font:700 18px/1.22 'Hanken Grotesk',sans-serif;color:#3a2c33;margin-top:5px;letter-spacing:-.01em">Drei Schwestern rösten jetzt im Nordend</div>
+                <div style="font:400 13px/1.45 'Hanken Grotesk',sans-serif;color:#8a7984;margin-top:6px">Die Rösterei „Drei Bohnen" ist frauengeführt.</div>
+              </div>
+            </div>
+            <div style="background:#fff;border-radius:24px;padding:13px;display:flex;gap:13px;align-items:center;box-shadow:0 6px 20px rgba(120,60,90,.07)">
+              <div style="width:74px;height:74px;flex:none;border-radius:18px;background:repeating-linear-gradient(135deg,#f0d6dd,#f0d6dd 7px,#f6e1e7 7px,#f6e1e7 14px)"></div>
+              <div style="flex:1">
+                <div style="font:700 15px/1.22 'Hanken Grotesk',sans-serif;color:#3a2c33;letter-spacing:-.01em">10 Jahre Buchladen am Bornheimer Hang</div>
+                <div style="font:400 12px 'Hanken Grotesk',sans-serif;color:#b09aa6;margin-top:6px">Bornheim · gestern</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="height:74px;flex:none;display:flex;align-items:flex-start;justify-content:space-around;padding:11px 14px 0;background:#fff;border-top:1px solid rgba(120,60,90,.08)">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#a98fd0"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="3" rx="1.5" fill="currentColor"/><rect x="4" y="11" width="16" height="2.4" rx="1.2" fill="currentColor"/><rect x="4" y="16" width="11" height="2.4" rx="1.2" fill="currentColor"/></svg><span style="font:700 10.5px 'Hanken Grotesk',sans-serif">Feed</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#c3aec0"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.2" stroke="currentColor" stroke-width="2.1"/><line x1="15.6" y1="15.6" x2="19.5" y2="19.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Entdecken</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#c3aec0"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 3.2 19 6v6.2c0 4.3-2.9 7-7 8.6-4.1-1.6-7-4.3-7-8.6V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Sicher</span></div>
+        </div>
+        <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:#2b2230;opacity:.8;z-index:6"></div>
+      </div>
+    </div>
+
+    <!-- ============ 1c CALM MINIMAL ============ -->
+    <div class="dv-opt" id="1c">
+      <div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a><span><b>Ruhig &amp; minimal.</b> Greige, viel Weißraum, ein Flieder-Akzent, feine Linien statt Karten. Seriös.</span></div>
+      <div style="width:360px;height:760px;border-radius:46px;border:10px solid #1f1c22;box-shadow:0 22px 50px rgba(40,35,50,.2);overflow:hidden;position:relative;display:flex;flex-direction:column;background:#f4f2ee;font-family:'Hanken Grotesk',system-ui,sans-serif">
+        <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:94px;height:26px;background:#1f1c22;border-radius:14px;z-index:6"></div>
+        <div style="height:50px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 28px 0 30px;color:#262329;font-size:14px;font-weight:600">
+          <span>9:41</span>
+          <div style="display:flex;align-items:center;gap:5px">
+            <div style="display:flex;align-items:flex-end;gap:2px;height:11px"><div style="width:3px;height:5px;background:#262329;border-radius:1px"></div><div style="width:3px;height:7px;background:#262329;border-radius:1px"></div><div style="width:3px;height:9px;background:#262329;border-radius:1px"></div><div style="width:3px;height:11px;background:#262329;border-radius:1px"></div></div>
+            <div style="width:15px;height:11px;border:1.5px solid #262329;border-radius:3px;position:relative"><div style="position:absolute;inset:1.5px;width:7px;background:#262329;border-radius:1px"></div></div>
+          </div>
+        </div>
+        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+          <div style="padding:18px 26px 22px">
+            <div style="font:500 14px/1 'Hanken Grotesk',sans-serif;color:#9a93a0;letter-spacing:.04em">FRANKFURT</div>
+            <div style="font:400 27px/1.05 'Newsreader',serif;color:#262329;margin-top:14px;letter-spacing:-.01em">Diese Woche bewegt<br>sich etwas.</div>
+          </div>
+          <div style="padding:0 26px;flex:1;overflow:hidden">
+            <div style="padding-bottom:20px;border-bottom:1px solid rgba(38,35,41,.12)">
+              <div style="height:1px;background:#8b73b4;width:30px;margin-bottom:14px"></div>
+              <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px"><span style="font:500 11px 'Hanken Grotesk',sans-serif;letter-spacing:.06em;color:#8b73b4">VERIFIZIERT ✓</span></div>
+              <div style="font:400 20px/1.25 'Newsreader',serif;color:#262329;letter-spacing:-.005em">Drei Schwestern rösten jetzt im Nordend</div>
+              <div style="font:400 13.5px/1.5 'Hanken Grotesk',sans-serif;color:#736b7a;margin-top:9px">Die Rösterei „Drei Bohnen" ist frauengeführt und seit dieser Woche geprüft.</div>
+              <div style="font:400 12px 'Hanken Grotesk',sans-serif;color:#a39bab;margin-top:11px">Nordend · vor 2 Std</div>
+            </div>
+            <div style="padding:20px 0">
+              <div style="font:400 19px/1.25 'Newsreader',serif;color:#262329;letter-spacing:-.005em">10 Jahre Buchladen am Bornheimer Hang</div>
+              <div style="font:400 12px 'Hanken Grotesk',sans-serif;color:#a39bab;margin-top:9px">Bornheim · gestern</div>
+            </div>
+          </div>
+        </div>
+        <div style="height:74px;flex:none;display:flex;align-items:flex-start;justify-content:space-around;padding:11px 14px 0;border-top:1px solid rgba(38,35,41,.1);background:#f4f2ee">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8b73b4"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="3" rx="1.5" fill="currentColor"/><rect x="4" y="11" width="16" height="2.4" rx="1.2" fill="currentColor"/><rect x="4" y="16" width="11" height="2.4" rx="1.2" fill="currentColor"/></svg><span style="font:600 10.5px 'Hanken Grotesk',sans-serif">Feed</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#aaa3b1"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.2" stroke="currentColor" stroke-width="2.1"/><line x1="15.6" y1="15.6" x2="19.5" y2="19.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Entdecken</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#aaa3b1"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 3.2 19 6v6.2c0 4.3-2.9 7-7 8.6-4.1-1.6-7-4.3-7-8.6V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Sicher</span></div>
+        </div>
+        <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:#1f1c22;opacity:.8;z-index:6"></div>
+      </div>
+    </div>
+
+    <!-- ============ 1d LIVELY LILAC ============ -->
+    <div class="dv-opt" id="1d">
+      <div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a><span><b>Lebendig &amp; flieder.</b> Farbiger Hero-Block, weiße Karten, Rosa-Akzente, mutige Typo. Energetisch, optimistisch.</span></div>
+      <div style="width:360px;height:760px;border-radius:46px;border:10px solid #241a33;box-shadow:0 22px 50px rgba(60,40,100,.26);overflow:hidden;position:relative;display:flex;flex-direction:column;background:#f6f1f8;font-family:'Hanken Grotesk',system-ui,sans-serif">
+        <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:94px;height:26px;background:#241a33;border-radius:14px;z-index:6"></div>
+        <div style="background:#7b5fb8;padding:0 0 26px;flex:none;border-radius:0 0 28px 28px">
+          <div style="height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 28px 0 30px;color:#fff;font-size:14px;font-weight:600">
+            <span>9:41</span>
+            <div style="display:flex;align-items:center;gap:5px">
+              <div style="display:flex;align-items:flex-end;gap:2px;height:11px"><div style="width:3px;height:5px;background:#fff;border-radius:1px"></div><div style="width:3px;height:7px;background:#fff;border-radius:1px"></div><div style="width:3px;height:9px;background:#fff;border-radius:1px"></div><div style="width:3px;height:11px;background:#fff;border-radius:1px"></div></div>
+              <div style="width:15px;height:11px;border:1.5px solid #fff;border-radius:3px;position:relative"><div style="position:absolute;inset:1.5px;width:7px;background:#fff;border-radius:1px"></div></div>
+            </div>
+          </div>
+          <div style="padding:8px 24px 0">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font:700 22px/1 'Hanken Grotesk',sans-serif;color:#fff;letter-spacing:-.02em">Shevality</div>
+              <div style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;color:#fff;font:600 13px 'Hanken Grotesk',sans-serif">M</div>
+            </div>
+            <div style="font:400 26px/1.12 'Instrument Serif',serif;color:#fff;margin-top:18px;letter-spacing:.005em">Hallo Mara — sieh,<br>was in Frankfurt<br>gerade gelingt.</div>
+          </div>
+        </div>
+        <div style="flex:1;overflow:hidden;padding:18px 22px 16px;margin-top:-12px">
+          <div style="background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 8px 24px rgba(80,50,130,.12);margin-bottom:14px">
+            <div style="height:138px;background:repeating-linear-gradient(135deg,#d9c8ec,#d9c8ec 7px,#e6d9f3 7px,#e6d9f3 14px);position:relative">
+              <div style="position:absolute;top:11px;left:11px;background:#f3c6d2;border-radius:99px;padding:5px 11px;font:700 10.5px 'Hanken Grotesk',sans-serif;letter-spacing:.06em;color:#9a3a5e">NEU VERIFIZIERT ✓</div>
+            </div>
+            <div style="padding:13px 16px 16px">
+              <div style="font:700 18px/1.2 'Hanken Grotesk',sans-serif;color:#2d2440;letter-spacing:-.015em">Drei Schwestern rösten jetzt im Nordend</div>
+              <div style="font:400 12.5px 'Hanken Grotesk',sans-serif;color:#8c84a0;margin-top:6px">Rösterei „Drei Bohnen" · Nordend</div>
+            </div>
+          </div>
+          <div style="background:#fff;border-radius:20px;padding:13px;display:flex;gap:12px;align-items:center;box-shadow:0 6px 18px rgba(80,50,130,.1)">
+            <div style="width:64px;height:64px;flex:none;border-radius:15px;background:repeating-linear-gradient(135deg,#f3d2dc,#f3d2dc 7px,#f8e2e9 7px,#f8e2e9 14px)"></div>
+            <div style="flex:1">
+              <div style="font:700 14.5px/1.2 'Hanken Grotesk',sans-serif;color:#2d2440;letter-spacing:-.01em">10 Jahre Buchladen am Bornheimer Hang</div>
+              <div style="font:400 11.5px 'Hanken Grotesk',sans-serif;color:#9a92ac;margin-top:5px">Bornheim · gestern</div>
+            </div>
+          </div>
+        </div>
+        <div style="height:74px;flex:none;display:flex;align-items:flex-start;justify-content:space-around;padding:11px 14px 0;background:#fff;border-top:1px solid rgba(80,50,130,.08)">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#7b5fb8"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="3" rx="1.5" fill="currentColor"/><rect x="4" y="11" width="16" height="2.4" rx="1.2" fill="currentColor"/><rect x="4" y="16" width="11" height="2.4" rx="1.2" fill="currentColor"/></svg><span style="font:700 10.5px 'Hanken Grotesk',sans-serif">Feed</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#b3a8c8"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.2" stroke="currentColor" stroke-width="2.1"/><line x1="15.6" y1="15.6" x2="19.5" y2="19.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Entdecken</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#b3a8c8"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 3.2 19 6v6.2c0 4.3-2.9 7-7 8.6-4.1-1.6-7-4.3-7-8.6V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span style="font:500 10.5px 'Hanken Grotesk',sans-serif">Sicher</span></div>
+        </div>
+        <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:#241a33;opacity:.8;z-index:6"></div>
+      </div>
+    </div>
+
+  </div>
+  <p class="dv-next">Sag mir z.&nbsp;B.: „Bau den Prototyp mit <a class="dv-oid" href="#1a">1a</a>" · „<a class="dv-oid" href="#1b">1b</a>, aber Akzente aus <a class="dv-oid" href="#1d">1d</a>" · „<a class="dv-oid" href="#1c">1c</a> etwas wärmer" · oder „neue Richtungen".</p>
+</section>
+</x-dc>
+</body>
+</html>
