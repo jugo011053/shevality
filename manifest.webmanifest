@@ -1,0 +1,17 @@
+{
+  "name": "Shevality",
+  "short_name": "Shevality",
+  "description": "Frauengeführte Geschäfte in Frankfurt entdecken.",
+  "lang": "de",
+  "start_url": "/shevality/",
+  "scope": "/shevality/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ece7e0",
+  "theme_color": "#7b5fb8",
+  "icons": [
+    { "src": "icon-1024.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-1024.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-1024.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
