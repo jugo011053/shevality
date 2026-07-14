@@ -10,14 +10,22 @@ function rowToBusiness(r: any): Business {
     name: r.name,
     category: r.category,
     neighborhood: r.neighborhood,
-    image: r.image,
-    address: r.address,
-    hours: r.hours,
+    image: r.image ?? '',
+    address: r.address ?? '',
+    hours: r.hours ?? '',
     crit: {
       founded: !!r.founded,
       ownership: !!r.ownership,
       leadership: !!r.leadership,
     },
+    lat: r.lat ?? undefined,
+    lng: r.lng ?? undefined,
+    owner: r.owner ?? undefined,
+    rechtsform: r.rechtsform ?? undefined,
+    website: r.website ?? undefined,
+    description: r.description ?? undefined,
+    source: r.source ?? undefined,
+    verified: r.verified ?? undefined,
   };
 }
 

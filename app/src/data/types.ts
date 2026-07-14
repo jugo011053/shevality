@@ -9,6 +9,15 @@ export interface Business {
   crit: Record<CritKey, boolean>;
   address: string;
   hours: string;
+  // Ab Stufe 4: echte Läden (Gastronomie FFM)
+  lat?: number;          // Breitengrad (für die Karte)
+  lng?: number;          // Längengrad (für die Karte)
+  owner?: string;        // Inhaberin (aus öffentlichem Impressum)
+  rechtsform?: string;   // z. B. "Einzelunternehmen", "GmbH"
+  website?: string;      // offizielle Website (optional)
+  description?: string;  // kurze Beschreibung
+  source?: string;       // Beleg/Quelle (Impressum-Link)
+  verified?: boolean;    // true = geprüft ("sicher"), false = Kandidatin ("ungeprüft")
 }
 
 export interface CommentSeed {

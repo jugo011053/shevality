@@ -49,8 +49,8 @@ export function EntdeckenScreen({ navigation }: Props) {
         const items = list
           .filter((b) => b.neighborhood === n)
           .map((b) => {
-            const verified = CRIT_KEYS.filter((k) => b.crit[k]);
-            const verifLabel = verified.length === 3 ? 'Voll verifiziert' : CRIT[verified[0]].short;
+            const met = CRIT_KEYS.filter((k) => b.crit[k]);
+            const verifLabel = met.length === 3 ? 'Voll verifiziert' : met.length ? CRIT[met[0]].short : 'Gelistet';
             return { ...b, verifLabel };
           });
         return { neighborhood: n, count: `${items.length} ${items.length === 1 ? 'Ort' : 'Orte'}`, items };
@@ -144,10 +144,21 @@ export function EntdeckenScreen({ navigation }: Props) {
                   <Text style={{ fontFamily: fonts.young, fontSize: 18, color: colors.ink, letterSpacing: -0.1 }}>{b.name}</Text>
                   <Text style={{ fontFamily: fonts.hanken400, fontSize: 12.5, color: colors.muted, marginTop: 4 }}>{b.category}</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: 7 }}>
-                    <View style={{ width: 14, height: 14, borderRadius: 7, borderWidth: 1.2, borderColor: colors.purple, alignItems: 'center', justifyContent: 'center' }}>
-                      <Text style={{ fontSize: 8, color: colors.purple }}>✓</Text>
-                    </View>
-                    <Text style={{ fontFamily: fonts.hanken500, fontSize: 10.5, color: colors.purple }}>{b.verifLabel}</Text>
+                    {b.verified === false ? (
+                      <>
+                        <View style={{ width: 14, height: 14, borderRadius: 7, borderWidth: 1.2, borderColor: '#C79A4B', alignItems: 'center', justifyContent: 'center' }}>
+                          <Text style={{ fontSize: 8, color: '#C79A4B' }}>?</Text>
+                        </View>
+                        <Text style={{ fontFamily: fonts.hanken500, fontSize: 10.5, color: '#B0812F' }}>{b.verifLabel} · ungeprüft</Text>
+                      </>
+                    ) : (
+                      <>
+                        <View style={{ width: 14, height: 14, borderRadius: 7, borderWidth: 1.2, borderColor: colors.purple, alignItems: 'center', justifyContent: 'center' }}>
+                          <Text style={{ fontSize: 8, color: colors.purple }}>✓</Text>
+                        </View>
+                        <Text style={{ fontFamily: fonts.hanken500, fontSize: 10.5, color: colors.purple }}>{b.verifLabel}</Text>
+                      </>
+                    )}
                   </View>
                 </View>
                 <Text style={{ fontFamily: fonts.hanken400, fontSize: 20, color: colors.chevron }}>›</Text>
