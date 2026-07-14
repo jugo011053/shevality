@@ -17,6 +17,7 @@ if (!existsSync(join(dist, 'index.html'))) {
 
 copyFileSync(join(appDir, 'web', 'manifest.webmanifest'), join(dist, 'manifest.webmanifest'));
 copyFileSync(join(appDir, 'web', 'sw.js'), join(dist, 'sw.js'));
+copyFileSync(join(appDir, 'web', 'map.html'), join(dist, 'map.html'));
 copyFileSync(join(appDir, 'assets', 'icon.png'), join(dist, 'icon-1024.png'));
 
 const head = [

@@ -5,6 +5,7 @@ import { FeedStackParamList, EntdeckenStackParamList, SicherStackParamList, Root
 import { FeedScreen } from '../screens/FeedScreen';
 import { StoryDetailScreen } from '../screens/StoryDetailScreen';
 import { EntdeckenScreen } from '../screens/EntdeckenScreen';
+import { MapScreen } from '../screens/MapScreen';
 import { BusinessDetailScreen } from '../screens/BusinessDetailScreen';
 import { SicherScreen } from '../screens/SicherScreen';
 import { CustomTabBar } from '../components/CustomTabBar';
@@ -27,6 +28,7 @@ function EntdeckenStackNavigator() {
   return (
     <EntdeckenStack.Navigator screenOptions={{ headerShown: false }}>
       <EntdeckenStack.Screen name="EntdeckenHome" component={EntdeckenScreen} />
+      <EntdeckenStack.Screen name="EntdeckenMap" component={MapScreen} />
       <EntdeckenStack.Screen name="BusinessDetail" component={BusinessDetailScreen} />
     </EntdeckenStack.Navigator>
   );

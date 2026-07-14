@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Shevality – Karte</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>
+  :root{
+    --purple:#7b5fb8; --purple-ink:#5b4394; --amber:#c79a4b; --amber-ink:#9c7126;
+    --ink:#382a3d; --muted:#8a7984; --bg:#ece7e0; --card:#ffffff;
+  }
+  html,body{height:100%;margin:0}
+  #map{position:absolute;inset:0;background:var(--bg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+
+  /* Kartenstift / Pins */
+  .pin{width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);
+    border:2.5px solid #fff;box-shadow:0 2px 6px rgba(56,42,61,.35);
+    display:flex;align-items:center;justify-content:center}
+  .pin span{transform:rotate(45deg);color:#fff;font-size:12px;font-weight:700;line-height:1}
+  .pin.v{background:var(--purple)}
+  .pin.u{background:var(--amber)}
+
+  /* Popups im Marken-Look */
+  .leaflet-popup-content-wrapper{border-radius:16px;box-shadow:0 8px 24px rgba(56,42,61,.18);
+    padding:2px 4px}
+  .leaflet-popup-content{margin:14px 16px;line-height:1.35}
+  .leaflet-popup-tip{box-shadow:0 8px 24px rgba(56,42,61,.18)}
+  .pop-name{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.2px}
+  .pop-meta{font-size:12px;color:var(--muted);margin-top:3px}
+  .pop-badge{display:inline-flex;align-items:center;gap:5px;margin-top:9px;
+    font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:99px}
+  .pop-badge.v{color:var(--purple-ink);background:#efe7f8}
+  .pop-badge.u{color:var(--amber-ink);background:#faf1de}
+  .pop-owner{font-size:11.5px;color:var(--muted);margin-top:9px}
+  .pop-actions{display:flex;gap:8px;margin-top:12px}
+  .pop-actions a{flex:1;text-align:center;text-decoration:none;font-size:12.5px;font-weight:600;
+    padding:8px 10px;border-radius:11px}
+  .pop-actions a.primary{background:var(--purple);color:#fff}
+  .pop-actions a.ghost{border:1.4px solid var(--ink);color:var(--ink)}
+
+  /* Kopfzeile + Legende */
+  .overlay{position:absolute;z-index:500;left:12px;top:12px;
+    background:rgba(255,255,255,.94);backdrop-filter:blur(6px);
+    border-radius:14px;box-shadow:0 4px 14px rgba(56,42,61,.14);
+    padding:11px 14px;max-width:min(80vw,300px)}
+  .overlay h1{margin:0;font-size:14px;color:var(--ink);letter-spacing:-.2px}
+  .overlay p{margin:2px 0 0;font-size:11px;color:var(--muted)}
+  .legend{display:flex;gap:14px;margin-top:9px}
+  .legend div{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink)}
+  .dot{width:11px;height:11px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+  .dot.v{background:var(--purple)} .dot.u{background:var(--amber)}
+  .leaflet-container a.leaflet-popup-close-button{color:var(--muted)}
+  .leaflet-control-attribution{font-size:10px;background:rgba(255,255,255,.7)}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="overlay">
+  <h1>Frauengeführt in Frankfurt</h1>
+  <p>20 Läden · tippe einen Punkt an</p>
+  <div class="legend">
+    <div><span class="dot v"></span>geprüft</div>
+    <div><span class="dot u"></span>ungeprüft</div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const PLACES = [
+  {name:"cà phê, ơi!",cat:"Café",hood:"Sachsenhausen",lat:50.0999591,lng:8.6815514,v:true,owner:"Quynh Nhu Nguyen",web:"https://www.capheoi.de/"},
+  {name:"Home Ramen",cat:"Restaurant",hood:"Ostend",lat:50.1156387,lng:8.6972451,v:true,owner:"Qian Zhang",web:"https://www.home-ramen.de/"},
+  {name:"Charlot",cat:"Restaurant",hood:"Innenstadt",lat:50.1155,lng:8.6727,v:true,owner:"Kerstin Schneider",web:""},
+  {name:"China Restaurant Yung 容龍酒家",cat:"Restaurant",hood:"Nordend",lat:50.1201,lng:8.6800,v:true,owner:"Wai Wah Yung",web:""},
+  {name:"Cocina Argentina",cat:"Restaurant",hood:"Ostend",lat:50.1095,lng:8.6968,v:true,owner:"Fabiana Andrea Jarma",web:""},
+  {name:"Matildas Kitchen",cat:"Café",hood:"Westend-Nord",lat:50.1222326,lng:8.6682562,v:true,owner:"Julia Hofmann",web:"https://www.matildaskitchen.de/"},
+  {name:"Startorante",cat:"Restaurant",hood:"Gallus",lat:50.0993,lng:8.6285,v:true,owner:"Claudia Feger",web:"https://startorante.com/"},
+  {name:"The Place To Be",cat:"Bar",hood:"Altstadt",lat:50.1116,lng:8.6789,v:true,owner:"Daniela Gottschalk",web:""},
+  {name:"Worscht Company",cat:"Imbiss",hood:"Sachsenhausen",lat:50.1012,lng:8.6816,v:true,owner:"Alexandra Bernhardi",web:""},
+  {name:"Souper!",cat:"Suppenküche",hood:"Altstadt",lat:50.1119,lng:8.6795,v:true,owner:"Daniela Gottschalk",web:"http://www.souper.de"},
+  {name:"Gaststätte Momberger",cat:"Gaststätte",hood:"Heddernheim",lat:50.1586,lng:8.6496,v:true,owner:"Melanie Thurk",web:""},
+  {name:"Sampan",cat:"Restaurant",hood:"Nordend",lat:50.1258,lng:8.6856,v:true,owner:"Michelle Yung",web:""},
+  {name:"Pizzeria Dick & Doof",cat:"Pizzeria",hood:"Sachsenhausen",lat:50.1042,lng:8.6791,v:true,owner:"Zvijezdana Di Liberto",web:""},
+  {name:"Café Crumble",cat:"Café",hood:"Bockenheim",lat:50.1196,lng:8.6486,v:false,owner:"Bettina Evans",web:""},
+  {name:"Pizzeria Charly Braun",cat:"Pizzeria",hood:"Bornheim",lat:50.1161,lng:8.7103,v:false,owner:"Carmela Santoro Barbuto",web:""},
+  {name:"KP21",cat:"Restaurant",hood:"Hausen",lat:50.1314,lng:8.6260,v:false,owner:"Marzena Ferrara",web:""},
+  {name:"Kanonesteppel",cat:"Gaststätte",hood:"Sachsenhausen",lat:50.1026,lng:8.6884,v:false,owner:"Petra Weck",web:""},
+  {name:"Holzkopp",cat:"Gaststätte",hood:"Nied",lat:50.1000,lng:8.5684,v:false,owner:"Jennifer Yilmaz-Rölke",web:""},
+  {name:"Burger AG",cat:"Restaurant",hood:"Nieder-Eschbach",lat:50.1907,lng:8.6664,v:false,owner:"Nadine Proft",web:""},
+  {name:"Wirtshaus Gickelschlag",cat:"Gaststätte",hood:"Bornheim",lat:50.1288,lng:8.7117,v:false,owner:"Nicole Moser",web:""}
+];
+
+const map = L.map("map",{zoomControl:true,attributionControl:true}).setView([50.1136,8.68],12.4);
+L.control.zoom({position:"bottomright"}).addTo(map);
+map.zoomControl.remove(); // Standard oben-links weg, unten-rechts gesetzt
+
+L.tileLayer("https://{s}.basemap.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",{
+  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  subdomains:"abcd", maxZoom:19
+}).addTo(map);
+
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+
+const bounds = [];
+PLACES.forEach(p=>{
+  const icon = L.divIcon({className:"",html:`<div class="pin ${p.v?'v':'u'}"><span>${p.v?'✓':'?'}</span></div>`,
+    iconSize:[28,28],iconAnchor:[14,28],popupAnchor:[0,-28]});
+  const route = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+  const web = p.web ? `<a class="ghost" href="${esc(p.web)}" target="_blank" rel="noopener">Website</a>` : "";
+  const html = `<div class="pop">
+      <div class="pop-name">${esc(p.name)}</div>
+      <div class="pop-meta">${esc(p.cat)} · ${esc(p.hood)}</div>
+      <div class="pop-badge ${p.v?'v':'u'}">${p.v?'✓ von einer Frau geleitet':'? geleitet · ungeprüft'}</div>
+      <div class="pop-owner">Inhaberin: ${esc(p.owner)}</div>
+      <div class="pop-actions"><a class="primary" href="${route}" target="_blank" rel="noopener">Route</a>${web}</div>
+    </div>`;
+  L.marker([p.lat,p.lng],{icon}).addTo(map).bindPopup(html,{closeButton:true,maxWidth:260});
+  bounds.push([p.lat,p.lng]);
+});
+map.fitBounds(bounds,{padding:[60,60],maxZoom:14});
+</script>
+</body>
+</html>

@@ -7,6 +7,7 @@ export type FeedStackParamList = {
 
 export type EntdeckenStackParamList = {
   EntdeckenHome: undefined;
+  EntdeckenMap: undefined;
   BusinessDetail: { id: string };
 };
 

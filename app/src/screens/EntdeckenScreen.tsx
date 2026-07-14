@@ -63,8 +63,19 @@ export function EntdeckenScreen({ navigation }: Props) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={['top']}>
       <View style={{ paddingHorizontal: 24, paddingTop: 10 }}>
-        <Text style={{ fontFamily: fonts.young, fontSize: 32, color: colors.ink, letterSpacing: -0.32 }}>Entdecken</Text>
-        <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 14, color: colors.pink, marginTop: 6 }}>Frauengeführt in Frankfurt</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontFamily: fonts.young, fontSize: 32, color: colors.ink, letterSpacing: -0.32 }}>Entdecken</Text>
+            <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 14, color: colors.pink, marginTop: 6 }}>Frauengeführt in Frankfurt</Text>
+          </View>
+          <Pressable
+            onPress={() => navigation.navigate('EntdeckenMap')}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 9, paddingHorizontal: 14, borderRadius: 99, backgroundColor: colors.purple, marginTop: 4 }}
+          >
+            <Text style={{ fontSize: 13 }}>🗺️</Text>
+            <Text style={{ fontFamily: fonts.hanken600, fontSize: 12.5, color: colors.white }}>Karte</Text>
+          </Pressable>
+        </View>
 
         <View
           style={{
