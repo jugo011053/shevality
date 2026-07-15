@@ -6,8 +6,8 @@ import { useAppState } from '../../state/AppState';
 import { ArchImage } from '../ArchImage';
 import { Wordmark } from '../Wordmark';
 import {
-  EventPost, FeedPost, FEED_UI, GlobalLokalPost, Lang,
-  NeuGelistetPost, PortraitPost, RueckschrittPost, ZahlPost,
+  EventPost, FeedPost, FEED_ACCENT, FEED_UI, GlobalLokalPost, Lang,
+  NeuGelistetPost, PortraitPost, RueckschrittPost, ZahlPost, ZahlViz,
 } from '../../data/feed';
 
 interface CardCtx {
@@ -16,10 +16,21 @@ interface CardCtx {
   onOpenDiscover: () => void;
 }
 
+const clamp = (n: number) => Math.max(0, Math.min(100, n));
+
 // ---- geteilte Bausteine -------------------------------------------------
 
-function Eyebrow({ text, color = colors.pink }: { text: string; color?: string }) {
-  return <Text style={{ fontFamily: fonts.hanken700, fontSize: 10.5, letterSpacing: 1.4, color }}>{text}</Text>;
+function Eyebrow({ text, color }: { text: string; color: string }) {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+      <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: color }} />
+      <Text style={{ fontFamily: fonts.hanken700, fontSize: 10.5, letterSpacing: 1.4, color }}>{text}</Text>
+    </View>
+  );
+}
+
+function TopImage({ uri, height }: { uri?: string; height: number }) {
+  return <ArchImage uri={uri} height={height} radiusTop={23} radiusBottom={0} />;
 }
 
 function SourceLine({ post, lang }: { post: FeedPost; lang: Lang }) {
@@ -27,8 +38,7 @@ function SourceLine({ post, lang }: { post: FeedPost; lang: Lang }) {
   return (
     <Pressable onPress={() => s.url && Linking.openURL(s.url)} style={{ marginTop: 14 }}>
       <Text style={{ fontFamily: fonts.hanken500, fontSize: 10.5, color: colors.mutedLight }}>
-        {FEED_UI.source[lang]}: {s.institution} · {s.year}
-        {s.url ? '  ›' : ''}
+        {FEED_UI.source[lang]}: {s.institution} · {s.year}{s.url ? '  ›' : ''}
       </Text>
     </Pressable>
   );
@@ -43,14 +53,13 @@ function Method({ post, lang }: { post: FeedPost; lang: Lang }) {
   );
 }
 
-// Fußzeile mit Shevality-Zeichen + Aktionen (Teilen prominent, Merken).
 function Footer({ post, lang }: { post: FeedPost; lang: Lang }) {
   const { saves, toggleSave } = useAppState();
   const [copied, setCopied] = useState(false);
   const saved = !!saves[post.id];
 
   const onShare = async () => {
-    const text = post.share[lang].join('\n') + '\n\n— shevality · ' + FEED_UI.tagline[lang];
+    const text = post.share[lang].join('\n') + '\n\n— shevality';
     try {
       if (Platform.OS === 'web') {
         const nav: any = typeof navigator !== 'undefined' ? navigator : null;
@@ -64,7 +73,7 @@ function Footer({ post, lang }: { post: FeedPost; lang: Lang }) {
         await Share.share({ message: text });
       }
     } catch {
-      /* Nutzer hat abgebrochen o. Ä. – bewusst still */
+      /* abgebrochen – bewusst still */
     }
   };
 
@@ -95,11 +104,11 @@ function Footer({ post, lang }: { post: FeedPost; lang: Lang }) {
   );
 }
 
-function CtaButton({ label, onPress }: { label: string; onPress: () => void }) {
+function CtaButton({ label, color, onPress }: { label: string; color: string; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} style={{ marginTop: 15, height: 46, borderRadius: 23, borderWidth: 1.5, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 7 }}>
-      <Text style={{ fontFamily: fonts.hanken600, fontSize: 13, color: colors.ink }}>{label}</Text>
-      <Text style={{ fontSize: 14, color: colors.ink }}>→</Text>
+    <Pressable onPress={onPress} style={{ marginTop: 15, height: 46, borderRadius: 23, borderWidth: 1.5, borderColor: color, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 7 }}>
+      <Text style={{ fontFamily: fonts.hanken600, fontSize: 13, color }}>{label}</Text>
+      <Text style={{ fontSize: 14, color }}>→</Text>
     </Pressable>
   );
 }
@@ -109,8 +118,8 @@ const SHELL = {
   borderRadius: 24,
   borderWidth: 1,
   borderColor: colors.cardBorder,
-  padding: 20,
   marginTop: 16,
+  overflow: 'hidden',
 } as const;
 
 function ctaPress(post: FeedPost, ctx: CardCtx) {
@@ -119,22 +128,65 @@ function ctaPress(post: FeedPost, ctx: CardCtx) {
   else ctx.onOpenDiscover();
 }
 
-// ---- 1) ZAHL – dominante Zahl ------------------------------------------
+// ---- Mini-Visualisierung für Statistiken -------------------------------
+
+function Viz({ viz, accent, lang }: { viz: ZahlViz; accent: string; lang: Lang }) {
+  if (viz.kind === 'percent') {
+    return (
+      <View style={{ marginTop: 16 }}>
+        {!!viz.barLabel && (
+          <Text style={{ fontFamily: fonts.hanken500, fontSize: 11, color: colors.muted, marginBottom: 6 }}>{viz.barLabel[lang]}</Text>
+        )}
+        <View style={{ height: 12, borderRadius: 6, backgroundColor: '#ece5ea' }}>
+          <View style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${clamp(viz.value)}%`, backgroundColor: accent, borderRadius: 6 }} />
+          {viz.ref != null && (
+            <View style={{ position: 'absolute', left: `${clamp(viz.ref)}%`, top: -4, bottom: -4, width: 2, backgroundColor: colors.ink, opacity: 0.5 }} />
+          )}
+        </View>
+        {!!viz.refLabel && (
+          <Text style={{ fontFamily: fonts.hanken500, fontSize: 10.5, color: colors.mutedLight, marginTop: 6, textAlign: 'right' }}>
+            ▏ {viz.refLabel[lang]}
+          </Text>
+        )}
+      </View>
+    );
+  }
+  // compare
+  const max = Math.max(viz.a.value, viz.b.value) || 1;
+  const Row = ({ label, value, display, fill }: { label: string; value: number; display: string; fill: string }) => (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 9, marginTop: 8 }}>
+      <Text style={{ width: 56, fontFamily: fonts.hanken500, fontSize: 11.5, color: colors.muted }}>{label}</Text>
+      <View style={{ flex: 1, height: 16, borderRadius: 8, backgroundColor: '#ece5ea' }}>
+        <View style={{ height: 16, width: `${(value / max) * 100}%`, backgroundColor: fill, borderRadius: 8 }} />
+      </View>
+      <Text style={{ width: 64, textAlign: 'right', fontFamily: fonts.hanken700, fontSize: 12.5, color: colors.ink }}>{display}</Text>
+    </View>
+  );
+  return (
+    <View style={{ marginTop: 14 }}>
+      <Row label={viz.a.label[lang]} value={viz.a.value} display={viz.a.display[lang]} fill={accent} />
+      <Row label={viz.b.label[lang]} value={viz.b.value} display={viz.b.display[lang]} fill={colors.mutedLight} />
+    </View>
+  );
+}
+
+// ---- 1) ZAHL – dominante Zahl + Mini-Visualisierung --------------------
 
 function ZahlCard({ post, ctx }: { post: ZahlPost; ctx: CardCtx }) {
   const { lang } = ctx;
+  const accent = FEED_ACCENT.zahl;
   return (
-    <View style={SHELL}>
-      <Eyebrow text={FEED_UI.eyebrow.zahl[lang]} />
-      <Text style={{ fontFamily: fonts.young, fontSize: 52, lineHeight: 58, color: colors.purple, letterSpacing: -1, marginTop: 8 }}>
-        {post.stat[lang]}
-      </Text>
-      {!!post.statSub && (
-        <Text style={{ fontFamily: fonts.hanken500, fontSize: 12.5, color: colors.pink, marginTop: 2 }}>{post.statSub[lang]}</Text>
-      )}
-      <Text style={{ fontFamily: fonts.hanken400, fontSize: 14, lineHeight: 21, color: colors.inkSoft, marginTop: 14 }}>
-        {post.text[lang]}
-      </Text>
+    <View style={[SHELL, { padding: 20 }]}>
+      <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+        <View style={{ flex: 1 }}>
+          <Eyebrow text={FEED_UI.eyebrow.zahl[lang]} color={accent} />
+          <Text style={{ fontFamily: fonts.young, fontSize: 50, lineHeight: 56, color: accent, letterSpacing: -1, marginTop: 8 }}>{post.stat[lang]}</Text>
+          {!!post.statSub && <Text style={{ fontFamily: fonts.hanken500, fontSize: 12.5, color: colors.pink, marginTop: 2 }}>{post.statSub[lang]}</Text>}
+        </View>
+        <ArchImage uri={post.image} height={54} radiusTop={22} radiusBottom={12} style={{ width: 54, flexShrink: 0, marginTop: 2 }} />
+      </View>
+      {!!post.viz && <Viz viz={post.viz} accent={accent} lang={lang} />}
+      <Text style={{ fontFamily: fonts.hanken400, fontSize: 13.5, lineHeight: 20, color: colors.inkSoft, marginTop: 14 }}>{post.text[lang]}</Text>
       <SourceLine post={post} lang={lang} />
       <Method post={post} lang={lang} />
       <Footer post={post} lang={lang} />
@@ -146,26 +198,28 @@ function ZahlCard({ post, ctx }: { post: ZahlPost; ctx: CardCtx }) {
 
 function GlobalLokalCard({ post, ctx }: { post: GlobalLokalPost; ctx: CardCtx }) {
   const { lang } = ctx;
+  const accent = FEED_ACCENT.global_lokal;
   return (
     <View style={SHELL}>
-      <Eyebrow text={FEED_UI.eyebrow.global_lokal[lang]} color={colors.purple} />
-      <Text style={{ fontFamily: fonts.young, fontSize: 24, lineHeight: 29, color: colors.ink, letterSpacing: -0.3, marginTop: 9 }}>
-        {post.headline[lang]}
-      </Text>
-      <View style={{ marginTop: 16 }}>
-        {post.steps.map((st, i) => (
-          <View key={i} style={{ marginLeft: i * 18, marginTop: i === 0 ? 0 : 10, borderLeftWidth: 3, borderLeftColor: colors.purple, paddingLeft: 12, paddingVertical: 2 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8 }}>
-              <Text style={{ fontFamily: fonts.hanken700, fontSize: 10.5, letterSpacing: 1, color: colors.pink }}>{st.scope[lang].toUpperCase()}</Text>
-              <Text style={{ fontFamily: fonts.young, fontSize: 22, color: colors.purple, letterSpacing: -0.4 }}>{st.value[lang]}</Text>
+      <TopImage uri={post.image} height={120} />
+      <View style={{ padding: 20 }}>
+        <Eyebrow text={FEED_UI.eyebrow.global_lokal[lang]} color={accent} />
+        <Text style={{ fontFamily: fonts.young, fontSize: 23, lineHeight: 28, color: colors.ink, letterSpacing: -0.3, marginTop: 9 }}>{post.headline[lang]}</Text>
+        <View style={{ marginTop: 16 }}>
+          {post.steps.map((st, i) => (
+            <View key={i} style={{ marginLeft: i * 18, marginTop: i === 0 ? 0 : 10, borderLeftWidth: 3, borderLeftColor: accent, paddingLeft: 12, paddingVertical: 2 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8 }}>
+                <Text style={{ fontFamily: fonts.hanken700, fontSize: 10.5, letterSpacing: 1, color: colors.pink }}>{st.scope[lang].toUpperCase()}</Text>
+                <Text style={{ fontFamily: fonts.young, fontSize: 22, color: accent, letterSpacing: -0.4 }}>{st.value[lang]}</Text>
+              </View>
+              <Text style={{ fontFamily: fonts.hanken400, fontSize: 12.5, lineHeight: 18, color: colors.inkSoft, marginTop: 2 }}>{st.note[lang]}</Text>
             </View>
-            <Text style={{ fontFamily: fonts.hanken400, fontSize: 12.5, lineHeight: 18, color: colors.inkSoft, marginTop: 2 }}>{st.note[lang]}</Text>
-          </View>
-        ))}
+          ))}
+        </View>
+        {!!post.cta && <CtaButton label={post.cta.label[lang]} color={accent} onPress={() => ctaPress(post, ctx)} />}
+        <SourceLine post={post} lang={lang} />
+        <Footer post={post} lang={lang} />
       </View>
-      {!!post.cta && <CtaButton label={post.cta.label[lang]} onPress={() => ctaPress(post, ctx)} />}
-      <SourceLine post={post} lang={lang} />
-      <Footer post={post} lang={lang} />
     </View>
   );
 }
@@ -174,21 +228,20 @@ function GlobalLokalCard({ post, ctx }: { post: GlobalLokalPost; ctx: CardCtx })
 
 function PortraitCard({ post, ctx }: { post: PortraitPost; ctx: CardCtx }) {
   const { lang } = ctx;
+  const accent = FEED_ACCENT.portrait;
   return (
-    <View style={[SHELL, { padding: 0, overflow: 'hidden' }]}>
+    <View style={SHELL}>
       <View>
-        <ArchImage uri={''} height={230} radiusTop={24} radiusBottom={0} />
-        <View style={{ position: 'absolute', left: 18, right: 18, bottom: 14 }}>
-          <View style={{ alignSelf: 'flex-start', backgroundColor: 'rgba(255,255,255,.9)', borderRadius: 99, paddingVertical: 4, paddingHorizontal: 10 }}>
-            <Eyebrow text={FEED_UI.eyebrow.portrait[lang]} color={colors.purple} />
-          </View>
+        <TopImage uri={post.image} height={230} />
+        <View style={{ position: 'absolute', left: 18, bottom: 14, backgroundColor: 'rgba(255,255,255,.92)', borderRadius: 99, paddingVertical: 4, paddingHorizontal: 11 }}>
+          <Eyebrow text={FEED_UI.eyebrow.portrait[lang]} color={accent} />
         </View>
       </View>
       <View style={{ padding: 20 }}>
         <Text style={{ fontFamily: fonts.young, fontSize: 26, lineHeight: 30, color: colors.ink, letterSpacing: -0.4 }}>{post.headline[lang]}</Text>
         <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 15, color: colors.pink, marginTop: 8 }}>{post.motiv[lang]}</Text>
         <Text style={{ fontFamily: fonts.hanken400, fontSize: 13.5, lineHeight: 20, color: colors.inkSoft, marginTop: 12 }}>{post.text[lang]}</Text>
-        {!!post.cta && <CtaButton label={post.cta.label[lang]} onPress={() => ctaPress(post, ctx)} />}
+        {!!post.cta && <CtaButton label={post.cta.label[lang]} color={accent} onPress={() => ctaPress(post, ctx)} />}
         <SourceLine post={post} lang={lang} />
         <Footer post={post} lang={lang} />
       </View>
@@ -196,63 +249,58 @@ function PortraitCard({ post, ctx }: { post: PortraitPost; ctx: CardCtx }) {
   );
 }
 
-// ---- 4) NEU_GELISTET – kompakt, listenartig ----------------------------
+// ---- 4) NEU_GELISTET – Werbe-Blurb, kein Name --------------------------
 
 function NeuGelistetCard({ post, ctx }: { post: NeuGelistetPost; ctx: CardCtx }) {
   const { lang } = ctx;
+  const accent = FEED_ACCENT.neu_gelistet;
   return (
-    <View style={[SHELL, { borderLeftWidth: 4, borderLeftColor: colors.purple }]}>
-      <Eyebrow text={FEED_UI.eyebrow.neu_gelistet[lang]} color={colors.purple} />
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14, marginTop: 10 }}>
-        <ArchImage uri={''} height={58} radiusTop={26} radiusBottom={10} style={{ width: 52, flexShrink: 0 }} />
-        <View style={{ flex: 1 }}>
-          <Text style={{ fontFamily: fonts.young, fontSize: 20, color: colors.ink, letterSpacing: -0.2 }}>{post.businessName}</Text>
-          <Text style={{ fontFamily: fonts.hanken400, fontSize: 12, color: colors.muted, marginTop: 3 }}>
-            {post.category[lang]} · {post.neighborhood}
-          </Text>
+    <View style={SHELL}>
+      <TopImage uri={post.image} height={150} />
+      <View style={{ padding: 20 }}>
+        <Eyebrow text={FEED_UI.eyebrow.neu_gelistet[lang]} color={accent} />
+        <Text style={{ fontFamily: fonts.young, fontSize: 22, color: colors.ink, letterSpacing: -0.3, marginTop: 9 }}>{post.businessName}</Text>
+        <Text style={{ fontFamily: fonts.hanken400, fontSize: 12, color: colors.muted, marginTop: 3 }}>{post.category[lang]} · {post.neighborhood}</Text>
+        <Text style={{ fontFamily: fonts.hanken400, fontSize: 13.5, lineHeight: 20, color: colors.inkSoft, marginTop: 12 }}>{post.text[lang]}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 12, alignSelf: 'flex-start', backgroundColor: '#e9f1ec', borderRadius: 99, paddingVertical: 5, paddingHorizontal: 11 }}>
+          <Text style={{ fontSize: 11, color: accent }}>✓</Text>
+          <Text style={{ fontFamily: fonts.hanken600, fontSize: 11.5, color: accent }}>{lang === 'de' ? 'von einer Frau geführt' : 'woman-led'}</Text>
         </View>
+        {!!post.cta && <CtaButton label={post.cta.label[lang]} color={accent} onPress={() => ctaPress(post, ctx)} />}
+        <SourceLine post={post} lang={lang} />
+        <Footer post={post} lang={lang} />
       </View>
-      <Text style={{ fontFamily: fonts.hanken400, fontSize: 13.5, lineHeight: 20, color: colors.inkSoft, marginTop: 13 }}>{post.text[lang]}</Text>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 12 }}>
-        <View style={{ width: 15, height: 15, borderRadius: 8, borderWidth: 1.3, borderColor: colors.purple, alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ fontSize: 8, color: colors.purple }}>✓</Text>
-        </View>
-        <Text style={{ fontFamily: fonts.hanken500, fontSize: 11.5, color: colors.purple }}>
-          {lang === 'de' ? 'Inhaberin laut Impressum' : 'Owner per legal notice'}: {post.owner}
-        </Text>
-      </View>
-      {!!post.cta && <CtaButton label={post.cta.label[lang]} onPress={() => ctaPress(post, ctx)} />}
-      <SourceLine post={post} lang={lang} />
-      <Footer post={post} lang={lang} />
     </View>
   );
 }
 
-// ---- 5) EVENT – Datum als Anker ----------------------------------------
+// ---- 5) EVENT – Datum als Anker auf dem Bild ---------------------------
 
 function EventCard({ post, ctx }: { post: EventPost; ctx: CardCtx }) {
   const { lang } = ctx;
+  const accent = FEED_ACCENT.event;
   return (
     <View style={SHELL}>
-      <View style={{ flexDirection: 'row', gap: 15 }}>
-        <View style={{ width: 62, height: 68, borderRadius: 16, backgroundColor: colors.purpleLight, alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Text style={{ fontFamily: fonts.young, fontSize: 28, color: colors.purple, lineHeight: 30 }}>{post.day}</Text>
-          <Text style={{ fontFamily: fonts.hanken600, fontSize: 11, color: colors.purple, letterSpacing: 1 }}>{post.month[lang].toUpperCase()}</Text>
-        </View>
-        <View style={{ flex: 1 }}>
-          <Eyebrow text={FEED_UI.eyebrow.event[lang]} color={colors.pink} />
-          <Text style={{ fontFamily: fonts.young, fontSize: 19, lineHeight: 23, color: colors.ink, letterSpacing: -0.2, marginTop: 5 }}>{post.headline[lang]}</Text>
+      <View>
+        <TopImage uri={post.image} height={140} />
+        <View style={{ position: 'absolute', left: 18, bottom: 14, width: 60, borderRadius: 14, backgroundColor: 'rgba(255,255,255,.95)', alignItems: 'center', paddingVertical: 7 }}>
+          <Text style={{ fontFamily: fonts.young, fontSize: 26, color: accent, lineHeight: 28 }}>{post.day}</Text>
+          <Text style={{ fontFamily: fonts.hanken700, fontSize: 10.5, color: accent, letterSpacing: 1 }}>{post.month[lang].toUpperCase()}</Text>
         </View>
       </View>
-      <Text style={{ fontFamily: fonts.hanken400, fontSize: 13.5, lineHeight: 20, color: colors.inkSoft, marginTop: 13 }}>{post.text[lang]}</Text>
-      <View style={{ marginTop: 12, gap: 4 }}>
-        <Text style={{ fontFamily: fonts.hanken600, fontSize: 12.5, color: colors.ink }}>🗓  {post.when[lang]}</Text>
-        <Text style={{ fontFamily: fonts.hanken500, fontSize: 12.5, color: colors.muted }}>📍  {post.place[lang]}</Text>
-        {!!post.cost && <Text style={{ fontFamily: fonts.hanken500, fontSize: 12.5, color: colors.muted }}>•  {post.cost[lang]}</Text>}
-        {!!post.registration && <Text style={{ fontFamily: fonts.hanken500, fontSize: 12.5, color: colors.muted }}>•  {post.registration[lang]}</Text>}
+      <View style={{ padding: 20 }}>
+        <Eyebrow text={FEED_UI.eyebrow.event[lang]} color={accent} />
+        <Text style={{ fontFamily: fonts.young, fontSize: 20, lineHeight: 25, color: colors.ink, letterSpacing: -0.2, marginTop: 8 }}>{post.headline[lang]}</Text>
+        <Text style={{ fontFamily: fonts.hanken400, fontSize: 13.5, lineHeight: 20, color: colors.inkSoft, marginTop: 11 }}>{post.text[lang]}</Text>
+        <View style={{ marginTop: 12, gap: 4 }}>
+          <Text style={{ fontFamily: fonts.hanken600, fontSize: 12.5, color: colors.ink }}>🗓  {post.when[lang]}</Text>
+          <Text style={{ fontFamily: fonts.hanken500, fontSize: 12.5, color: colors.muted }}>📍  {post.place[lang]}</Text>
+          {!!post.cost && <Text style={{ fontFamily: fonts.hanken500, fontSize: 12.5, color: colors.muted }}>•  {post.cost[lang]}</Text>}
+          {!!post.registration && <Text style={{ fontFamily: fonts.hanken500, fontSize: 12.5, color: colors.muted }}>•  {post.registration[lang]}</Text>}
+        </View>
+        <SourceLine post={post} lang={lang} />
+        <Footer post={post} lang={lang} />
       </View>
-      <SourceLine post={post} lang={lang} />
-      <Footer post={post} lang={lang} />
     </View>
   );
 }
@@ -261,24 +309,24 @@ function EventCard({ post, ctx }: { post: EventPost; ctx: CardCtx }) {
 
 function RueckschrittCard({ post, ctx }: { post: RueckschrittPost; ctx: CardCtx }) {
   const { lang } = ctx;
-  // Pflicht: handlung MUSS vorhanden sein – sonst Fehler statt Karte.
+  const accent = FEED_ACCENT.rueckschritt;
   if (!post.handlung || !post.handlung[lang]) {
     throw new Error(`Feed-Post "${post.id}" ist vom Typ rueckschritt, aber ohne Feld "handlung".`);
   }
-  const sober = '#6d5a67';
   return (
-    <View style={[SHELL, { backgroundColor: '#f4eff2', borderColor: '#e2d6dd', borderLeftWidth: 4, borderLeftColor: sober }]}>
-      <Eyebrow text={FEED_UI.eyebrow.rueckschritt[lang]} color={sober} />
-      <Text style={{ fontFamily: fonts.young, fontSize: 22, lineHeight: 27, color: colors.ink, letterSpacing: -0.3, marginTop: 9 }}>{post.headline[lang]}</Text>
-      <Text style={{ fontFamily: fonts.hanken400, fontSize: 13.5, lineHeight: 20, color: colors.inkSoft, marginTop: 12 }}>{post.text[lang]}</Text>
-
-      <View style={{ marginTop: 14, backgroundColor: colors.white, borderRadius: 14, padding: 14 }}>
-        <Text style={{ fontFamily: fonts.hanken700, fontSize: 11, letterSpacing: 0.6, color: sober }}>{FEED_UI.handlungTitle[lang].toUpperCase()}</Text>
-        <Text style={{ fontFamily: fonts.hanken400, fontSize: 13, lineHeight: 19, color: colors.inkSoft, marginTop: 6 }}>{post.handlung[lang]}</Text>
+    <View style={SHELL}>
+      <TopImage uri={post.image} height={120} />
+      <View style={{ padding: 20 }}>
+        <Eyebrow text={FEED_UI.eyebrow.rueckschritt[lang]} color={accent} />
+        <Text style={{ fontFamily: fonts.young, fontSize: 21, lineHeight: 26, color: colors.ink, letterSpacing: -0.3, marginTop: 9 }}>{post.headline[lang]}</Text>
+        <Text style={{ fontFamily: fonts.hanken400, fontSize: 13.5, lineHeight: 20, color: colors.inkSoft, marginTop: 11 }}>{post.text[lang]}</Text>
+        <View style={{ marginTop: 14, backgroundColor: '#f4eff2', borderRadius: 14, padding: 14, borderLeftWidth: 3, borderLeftColor: accent }}>
+          <Text style={{ fontFamily: fonts.hanken700, fontSize: 11, letterSpacing: 0.6, color: accent }}>{FEED_UI.handlungTitle[lang].toUpperCase()}</Text>
+          <Text style={{ fontFamily: fonts.hanken400, fontSize: 13, lineHeight: 19, color: colors.inkSoft, marginTop: 6 }}>{post.handlung[lang]}</Text>
+        </View>
+        <SourceLine post={post} lang={lang} />
+        <Footer post={post} lang={lang} />
       </View>
-
-      <SourceLine post={post} lang={lang} />
-      <Footer post={post} lang={lang} />
     </View>
   );
 }

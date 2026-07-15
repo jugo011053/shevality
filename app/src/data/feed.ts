@@ -18,6 +18,11 @@ export interface FeedSource {
   url2?: string;
 }
 
+// Mini-Visualisierung für Statistik-Karten (schnell fürs Auge).
+export type ZahlViz =
+  | { kind: 'percent'; value: number; ref?: number; refLabel?: Bi; barLabel?: Bi }
+  | { kind: 'compare'; a: { label: Bi; value: number; display: Bi }; b: { label: Bi; value: number; display: Bi } };
+
 interface FeedBase {
   id: string;
   klasse: Klasse;
@@ -27,6 +32,7 @@ interface FeedBase {
   source: FeedSource;
   methodik?: Bi;
   share: { de: string[]; en: string[] };
+  image?: string; // Beispiel-/Platzhalterbild (wird am Dateiende zugewiesen)
   // Optionaler Sprung in den Entdecken-Tab (Liste oder ein Geschäft)
   cta?: { label: Bi; businessId?: string };
 }
@@ -35,6 +41,7 @@ export interface ZahlPost extends FeedBase {
   typ: 'zahl';
   stat: Bi; // dominante Zahl, z. B. "36 %"
   statSub?: Bi; // kleine Zeile unter der Zahl
+  viz?: ZahlViz; // optionale Mini-Visualisierung
 }
 export interface GlobalLokalPost extends FeedBase {
   typ: 'global_lokal';
@@ -105,8 +112,8 @@ export const FEED_POSTS: FeedPost[] = [
     category: { de: 'Café', en: 'Café' }, neighborhood: 'Sachsenhausen',
     headline: { de: 'Vietnamesische Kaffeekultur in Sachsenhausen', en: 'Vietnamese coffee culture in Sachsenhausen' },
     text: {
-      de: 'Neu in der geprüften Shevality-Auswahl: cà phê, ơi! in der Textorstraße. Das offizielle Impressum nennt Quynh Nhu Nguyen ausdrücklich als Inhaberin; das Café verbindet Frühstück, Mittagessen, Kaffee und Gebäck mit vietnamesisch inspirierten Aromen.',
-      en: "Newly added to Shevality's verified selection: cà phê, ơi! in Frankfurt-Sachsenhausen. The official legal notice identifies Quynh Nhu Nguyen as the owner of the Vietnamese-inspired café.",
+      de: 'Klein, warm, vietnamesisch: Bei cà phê, ơi! in der Textorstraße gibt es Frühstück, Mittagessen, Kuchen und richtig guten Kaffee – mit Aromen, die an Saigon erinnern. Ein Lieblingsplatz zum Bleiben in Sachsenhausen.',
+      en: 'Small, warm, Vietnamese: cà phê, ơi! on Textorstraße serves breakfast, lunch, cake and seriously good coffee – with flavours that nod to Saigon. A cosy spot to linger in Sachsenhausen.',
     },
     source: { institution: 'Offizielles Impressum · Shevality-Prüfung', year: '2026', url: 'https://www.capheoi.de/kontakt-impressum' },
     methodik: {
@@ -115,8 +122,8 @@ export const FEED_POSTS: FeedPost[] = [
     },
     cta: { label: { de: 'Im Entdecken ansehen', en: 'View in Discover' }, businessId: 'g1' },
     share: {
-      de: ['NEU GELISTET', 'cà phê, ơi!', 'Vietnamesisch inspiriertes Café in Sachsenhausen', 'Inhaberin laut Impressum: Quynh Nhu Nguyen', 'Quelle: offizielles Impressum, geprüft 13.07.2026'],
-      en: ['NEWLY LISTED', 'cà phê, ơi!', 'Vietnamese-inspired café in Sachsenhausen', 'Owner per legal notice: Quynh Nhu Nguyen', 'Source: official legal notice, verified 13 Jul 2026'],
+      de: ['NEU GELISTET', 'cà phê, ơi! · Sachsenhausen', 'Vietnamesisch inspiriertes Café', 'Frühstück, Kuchen & richtig guter Kaffee', 'von einer Frau geführt'],
+      en: ['NEWLY LISTED', 'cà phê, ơi! · Sachsenhausen', 'Vietnamese-inspired café', 'Breakfast, cake & seriously good coffee', 'woman-led'],
     },
   },
   {
@@ -125,8 +132,8 @@ export const FEED_POSTS: FeedPost[] = [
     category: { de: 'Restaurant', en: 'Restaurant' }, neighborhood: 'Ostend',
     headline: { de: 'Argentinische Küche, von einer Frau geführt', en: 'Argentine cuisine, led by a woman' },
     text: {
-      de: 'Cocina Argentina an der Sonnemannstraße ist neu in der geprüften Shevality-Auswahl. Das Impressum der La Argentina GmbH nennt Fabiana Andrea Jarma ausdrücklich als Geschäftsführerin.',
-      en: "Cocina Argentina is a new addition to Shevality's verified Frankfurt directory. The official legal notice names Fabiana Andrea Jarma as managing director of La Argentina GmbH.",
+      de: 'Argentinisch essen im Ostend: Cocina Argentina an der Sonnemannstraße bringt Empanadas, Steaks und südamerikanische Gastfreundschaft nach Frankfurt. Gemütlich, herzlich und einen Besuch wert.',
+      en: 'Argentine food in Ostend: Cocina Argentina on Sonnemannstraße brings empanadas, steaks and South American warmth to Frankfurt. Cosy, welcoming and worth a visit.',
     },
     source: { institution: 'Offizielles Impressum · Shevality-Prüfung', year: '2026', url: 'https://www.cocina-argentina.de/impressum/' },
     methodik: {
@@ -135,8 +142,8 @@ export const FEED_POSTS: FeedPost[] = [
     },
     cta: { label: { de: 'Im Entdecken ansehen', en: 'View in Discover' }, businessId: 'g6' },
     share: {
-      de: ['NEU GELISTET', 'Cocina Argentina', 'Argentinische Küche im Frankfurter Ostend', 'Geschäftsführerin laut Impressum: Fabiana Andrea Jarma', 'Quelle: offizielles Impressum, geprüft 13.07.2026'],
-      en: ['NEWLY LISTED', 'Cocina Argentina', 'Argentine cuisine in Frankfurt-Ostend', 'Managing director per legal notice: Fabiana Andrea Jarma', 'Source: official legal notice, verified 13 Jul 2026'],
+      de: ['NEU GELISTET', 'Cocina Argentina · Ostend', 'Argentinische Küche in Frankfurt', 'Empanadas, Steaks & Gastfreundschaft', 'von einer Frau geführt'],
+      en: ['NEWLY LISTED', 'Cocina Argentina · Ostend', 'Argentine cuisine in Frankfurt', 'Empanadas, steaks & hospitality', 'woman-led'],
     },
   },
   {
@@ -405,6 +412,55 @@ export const FEED_POSTS: FeedPost[] = [
     },
   },
 ];
+
+// Dezente Akzentfarbe je Rubrik (Karten bleiben weiß).
+export const FEED_ACCENT: Record<FeedTyp, string> = {
+  zahl: '#7b5fb8',          // Lila
+  neu_gelistet: '#5b8a6f',  // Grün
+  global_lokal: '#b06a4f',  // Terracotta
+  portrait: '#a86b88',      // Rosé
+  event: '#c1894f',         // Pfirsich/Gold
+  rueckschritt: '#6d5a67',  // gedämpftes Plum
+};
+
+// Beispiel-/Platzhalterbilder (Stockfotos). Fällt ein Bild aus, greift
+// automatisch das Streifenmuster der Bildkomponente.
+const U = (id: string) => `https://images.unsplash.com/photo-${id}?w=800&q=80&auto=format&fit=crop`;
+const IMG = {
+  coffee: U('1495474472287-4d71bcdd2085'),
+  bakery: U('1509440159596-0249088772ff'),
+  market: U('1542838132-92c53300491e'),
+  finance: U('1554224155-6726b3ff858f'),
+  hands: U('1573497491765-dccce02b29df'),
+  parliament: U('1541872703-74c5e44368f9'),
+  restaurant: U('1414235077428-338989a2e8c0'),
+  city: U('1467269204594-9661b134dd2b'),
+  people: U('1522071820081-009f0129c71c'),
+  bike: U('1485965120184-e220f721d03e'),
+  gallery: U('1531058020387-3be344556be6'),
+  tech: U('1518770660439-4636190af475'),
+};
+
+const IMAGE_BY_ID: Record<string, string> = {
+  p1: IMG.coffee, p2: IMG.restaurant, pPortrait: IMG.bakery,
+  p3: IMG.hands, pGlobalLokal: IMG.city, p4: IMG.finance, p5: IMG.finance,
+  p6: IMG.hands, p7: IMG.hands, p8: IMG.tech, p9: IMG.parliament, p10: IMG.finance,
+  p11: IMG.people, p12: IMG.gallery, p13: IMG.bike, p14: IMG.parliament, p15: IMG.finance,
+};
+
+const VIZ_BY_ID: Record<string, ZahlViz> = {
+  p3: { kind: 'percent', value: 36, ref: 39, refLabel: { de: 'Ø 39 %', en: 'avg 39%' }, barLabel: { de: 'Gründerinnen', en: 'women founders' } },
+  p4: { kind: 'percent', value: 14.3, ref: 19.7, refLabel: { de: '2022: 19,7 %', en: '2022: 19.7%' }, barLabel: { de: 'KMU von Frauen geführt', en: 'SMEs led by women' } },
+  p5: { kind: 'compare', a: { label: { de: 'Frauen', en: 'Women' }, value: 22.81, display: { de: '22,81 €', en: '€22.81' } }, b: { label: { de: 'Männer', en: 'Men' }, value: 27.05, display: { de: '27,05 €', en: '€27.05' } } },
+  p7: { kind: 'percent', value: 36, ref: 24.2, refLabel: { de: 'mit Hinterbliebenen: 24,2 %', en: 'incl. survivors: 24.2%' }, barLabel: { de: 'weniger Alterseinkommen', en: 'less retirement income' } },
+  p8: { kind: 'percent', value: 19.5, ref: 16.5, refLabel: { de: '2015: 16,5 %', en: '2015: 16.5%' }, barLabel: { de: 'Frauen in IT-Berufen (EU)', en: 'women in EU ICT jobs' } },
+  p10: { kind: 'percent', value: 40, ref: 33, refLabel: { de: 'alle Board-Rollen: ~⅓', en: 'all board roles: ~1/3' }, barLabel: { de: 'nicht-geschäftsf. Boards', en: 'non-exec boards' } },
+};
+
+FEED_POSTS.forEach((p) => {
+  if (IMAGE_BY_ID[p.id]) p.image = IMAGE_BY_ID[p.id];
+  if (p.typ === 'zahl' && VIZ_BY_ID[p.id]) p.viz = VIZ_BY_ID[p.id];
+});
 
 // Rhythmus-Regel: nie zwei "rueckschritt" hintereinander; höchstens jede dritte
 // Karte darf "rueckschritt" sein. Ansonsten Reihenfolge (redaktioneller Wert) lassen.

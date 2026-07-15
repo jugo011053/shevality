@@ -7,7 +7,7 @@ import { fonts } from '../theme/fonts';
 import { FeedStackParamList } from '../navigation/types';
 import { Wordmark } from '../components/Wordmark';
 import { FeedCard } from '../components/feed2/FeedCards';
-import { FEED_POSTS, FEED_UI, Lang, orderFeed } from '../data/feed';
+import { FEED_POSTS, Lang, orderFeed } from '../data/feed';
 
 type Props = NativeStackScreenProps<FeedStackParamList, 'FeedHome'>;
 
@@ -25,8 +25,6 @@ export function FeedScreen({ navigation }: Props) {
     }),
     [lang, navigation],
   );
-
-  const closing = FEED_UI.closing[lang];
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={['top']}>
@@ -50,25 +48,10 @@ export function FeedScreen({ navigation }: Props) {
         </View>
       </View>
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 2, paddingBottom: 34 }} showsVerticalScrollIndicator={false}>
-        <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 15, color: colors.pink, marginTop: 2 }}>
-          {FEED_UI.tagline[lang]}
-        </Text>
-
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 4, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
         {posts.map((post) => (
           <FeedCard key={post.id} post={post} ctx={ctx} />
         ))}
-
-        {/* Bewusstes Ende – kein Endlos-Scroll */}
-        <View style={{ alignItems: 'center', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 }}>
-          <View style={{ width: 34, height: 1, backgroundColor: colors.hairlineStrong, marginBottom: 18 }} />
-          <Text style={{ fontFamily: fonts.young, fontSize: 22, color: colors.ink, textAlign: 'center', letterSpacing: -0.3 }}>
-            {closing.title}
-          </Text>
-          <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 13.5, color: colors.mutedLight, textAlign: 'center', marginTop: 8, lineHeight: 19 }}>
-            {closing.sub}
-          </Text>
-        </View>
       </ScrollView>
     </SafeAreaView>
   );
