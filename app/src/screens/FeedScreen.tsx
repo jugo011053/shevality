@@ -1,91 +1,74 @@
 import React, { useMemo, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../theme/colors';
 import { fonts } from '../theme/fonts';
-import { FEED, FEED_TABS } from '../data/constants';
 import { FeedStackParamList } from '../navigation/types';
-import { FeedTabKey } from '../data/types';
-import { useAppState } from '../state/AppState';
 import { Wordmark } from '../components/Wordmark';
-import { LargeArticle } from '../components/feed/LargeArticle';
-import { CompactArticle } from '../components/feed/CompactArticle';
-import { FactCard } from '../components/feed/FactCard';
-import { QuoteCard } from '../components/feed/QuoteCard';
-import { EventTile } from '../components/feed/EventTile';
-
-const DAY_LABELS = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+import { FeedCard } from '../components/feed2/FeedCards';
+import { FEED_POSTS, FEED_UI, Lang, orderFeed } from '../data/feed';
 
 type Props = NativeStackScreenProps<FeedStackParamList, 'FeedHome'>;
 
 export function FeedScreen({ navigation }: Props) {
-  const [feedTab, setFeedTab] = useState<FeedTabKey>('fuer-dich');
-  const { saves } = useAppState();
+  const [lang, setLang] = useState<Lang>('de');
+  const posts = useMemo(() => orderFeed(FEED_POSTS), []);
 
-  const dayLabel = useMemo(() => DAY_LABELS[new Date().getDay()], []);
+  const ctx = useMemo(
+    () => ({
+      lang,
+      onOpenBusiness: (id: string) =>
+        (navigation.getParent() as any)?.navigate('Entdecken', { screen: 'BusinessDetail', params: { id } }),
+      onOpenDiscover: () =>
+        (navigation.getParent() as any)?.navigate('Entdecken', { screen: 'EntdeckenHome' }),
+    }),
+    [lang, navigation],
+  );
 
-  const items = useMemo(() => {
-    if (feedTab === 'lokal') return FEED.filter((i) => i.cat === 'lokal');
-    if (feedTab === 'welt') return FEED.filter((i) => i.cat === 'welt');
-    if (feedTab === 'wissen') return FEED.filter((i) => i.cat === 'wissen');
-    if (feedTab === 'gemerkt') return FEED.filter((i) => saves[i.id]);
-    return FEED;
-  }, [feedTab, saves]);
-
-  const openStory = (id: string) => navigation.navigate('StoryDetail', { id });
+  const closing = FEED_UI.closing[lang];
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={['top']}>
       <View style={{ paddingHorizontal: 24, paddingTop: 8, paddingBottom: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Wordmark />
-        <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 14, color: colors.pink }}>{dayLabel}</Text>
+        <View style={{ flexDirection: 'row', backgroundColor: colors.white, borderRadius: 99, borderWidth: 1, borderColor: colors.cardBorder, padding: 2 }}>
+          {(['de', 'en'] as Lang[]).map((l) => {
+            const active = lang === l;
+            return (
+              <Pressable
+                key={l}
+                onPress={() => setLang(l)}
+                style={{ paddingVertical: 5, paddingHorizontal: 12, borderRadius: 99, backgroundColor: active ? colors.purple : 'transparent' }}
+              >
+                <Text style={{ fontFamily: fonts.hanken700, fontSize: 11.5, letterSpacing: 0.5, color: active ? colors.white : colors.muted }}>
+                  {l.toUpperCase()}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={{ flexGrow: 0, borderBottomWidth: 1, borderBottomColor: colors.hairline }}
-        contentContainerStyle={{ paddingHorizontal: 24, gap: 20 }}
-      >
-        {FEED_TABS.map((t) => {
-          const active = feedTab === t.key;
-          return (
-            <Text
-              key={t.key}
-              onPress={() => setFeedTab(t.key)}
-              style={{
-                paddingVertical: 12,
-                fontFamily: active ? fonts.hanken700 : fonts.hanken500,
-                fontSize: 14,
-                color: active ? colors.ink : colors.mutedFaint,
-                borderBottomWidth: 2,
-                borderBottomColor: active ? colors.purple : 'transparent',
-              }}
-            >
-              {t.label}
-            </Text>
-          );
-        })}
-      </ScrollView>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 2, paddingBottom: 34 }} showsVerticalScrollIndicator={false}>
+        <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 15, color: colors.pink, marginTop: 2 }}>
+          {FEED_UI.tagline[lang]}
+        </Text>
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 2, paddingBottom: 26 }}>
-        {items.map((it) => {
-          if (it.type === 'article' && it.size === 'large') return <LargeArticle key={it.id} item={it} onOpen={() => openStory(it.id)} />;
-          if (it.type === 'article' && it.size === 'compact') return <CompactArticle key={it.id} item={it} onOpen={() => openStory(it.id)} />;
-          if (it.type === 'fact') return <FactCard key={it.id} item={it} />;
-          if (it.type === 'quote') return <QuoteCard key={it.id} item={it} />;
-          if (it.type === 'event') return <EventTile key={it.id} item={it} onOpen={() => openStory(it.id)} />;
-          return null;
-        })}
-        {items.length === 0 && (
-          <View style={{ alignItems: 'center', paddingVertical: 64, paddingHorizontal: 24 }}>
-            <Text style={{ fontFamily: fonts.young, fontSize: 20, color: colors.ink }}>Noch nichts gemerkt</Text>
-            <Text style={{ fontFamily: fonts.hanken400, fontSize: 13, lineHeight: 20, color: colors.mutedLight, marginTop: 9, textAlign: 'center' }}>
-              Tippe bei einem Beitrag auf das Lesezeichen, um ihn hier zu sammeln.
-            </Text>
-          </View>
-        )}
+        {posts.map((post) => (
+          <FeedCard key={post.id} post={post} ctx={ctx} />
+        ))}
+
+        {/* Bewusstes Ende – kein Endlos-Scroll */}
+        <View style={{ alignItems: 'center', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 }}>
+          <View style={{ width: 34, height: 1, backgroundColor: colors.hairlineStrong, marginBottom: 18 }} />
+          <Text style={{ fontFamily: fonts.young, fontSize: 22, color: colors.ink, textAlign: 'center', letterSpacing: -0.3 }}>
+            {closing.title}
+          </Text>
+          <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 13.5, color: colors.mutedLight, textAlign: 'center', marginTop: 8, lineHeight: 19 }}>
+            {closing.sub}
+          </Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
