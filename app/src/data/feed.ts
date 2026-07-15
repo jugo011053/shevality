@@ -19,9 +19,11 @@ export interface FeedSource {
 }
 
 // Mini-Visualisierung für Statistik-Karten (schnell fürs Auge).
+// - compare: zwei beschriftete Vergleichsbalken (z. B. Frauen vs. Männer)
+// - delta:   ein direkt beschrifteter Chip (Richtung + Text), ohne Legende
 export type ZahlViz =
-  | { kind: 'percent'; value: number; ref?: number; refLabel?: Bi; barLabel?: Bi }
-  | { kind: 'compare'; a: { label: Bi; value: number; display: Bi }; b: { label: Bi; value: number; display: Bi } };
+  | { kind: 'compare'; a: { label: Bi; value: number; display: Bi }; b: { label: Bi; value: number; display: Bi } }
+  | { kind: 'delta'; tone: 'up' | 'down' | 'flat'; text: Bi };
 
 interface FeedBase {
   id: string;
@@ -449,18 +451,41 @@ const IMAGE_BY_ID: Record<string, string> = {
 };
 
 const VIZ_BY_ID: Record<string, ZahlViz> = {
-  p3: { kind: 'percent', value: 36, ref: 39, refLabel: { de: 'Ø 39 %', en: 'avg 39%' }, barLabel: { de: 'Gründerinnen', en: 'women founders' } },
-  p4: { kind: 'percent', value: 14.3, ref: 19.7, refLabel: { de: '2022: 19,7 %', en: '2022: 19.7%' }, barLabel: { de: 'KMU von Frauen geführt', en: 'SMEs led by women' } },
+  p3: { kind: 'delta', tone: 'down', text: { de: '3 Punkte unter dem langjährigen Schnitt (39 %)', en: '3 points below the long-term average (39%)' } },
+  p4: { kind: 'delta', tone: 'down', text: { de: '−5,4 Punkte seit 2022 (19,7 %)', en: '−5.4 points since 2022 (19.7%)' } },
   p5: { kind: 'compare', a: { label: { de: 'Frauen', en: 'Women' }, value: 22.81, display: { de: '22,81 €', en: '€22.81' } }, b: { label: { de: 'Männer', en: 'Men' }, value: 27.05, display: { de: '27,05 €', en: '€27.05' } } },
-  p7: { kind: 'percent', value: 36, ref: 24.2, refLabel: { de: 'mit Hinterbliebenen: 24,2 %', en: 'incl. survivors: 24.2%' }, barLabel: { de: 'weniger Alterseinkommen', en: 'less retirement income' } },
-  p8: { kind: 'percent', value: 19.5, ref: 16.5, refLabel: { de: '2015: 16,5 %', en: '2015: 16.5%' }, barLabel: { de: 'Frauen in IT-Berufen (EU)', en: 'women in EU ICT jobs' } },
-  p10: { kind: 'percent', value: 40, ref: 33, refLabel: { de: 'alle Board-Rollen: ~⅓', en: 'all board roles: ~1/3' }, barLabel: { de: 'nicht-geschäftsf. Boards', en: 'non-exec boards' } },
+  p7: { kind: 'delta', tone: 'flat', text: { de: 'mit Hinterbliebenenrenten: 24,2 %', en: 'incl. survivors’ pensions: 24.2%' } },
+  p8: { kind: 'delta', tone: 'up', text: { de: '+3 Punkte seit 2015 (16,5 %)', en: '+3 points since 2015 (16.5%)' } },
+  p10: { kind: 'delta', tone: 'flat', text: { de: 'über alle Board-Rollen: nur etwa ein Drittel', en: 'across all board roles: only about a third' } },
 };
 
 FEED_POSTS.forEach((p) => {
   if (IMAGE_BY_ID[p.id]) p.image = IMAGE_BY_ID[p.id];
   if (p.typ === 'zahl' && VIZ_BY_ID[p.id]) p.viz = VIZ_BY_ID[p.id];
 });
+
+// Mischen: Typen gleichmäßig verteilen, sodass möglichst nie zwei Karten
+// desselben Typs direkt hintereinander stehen. Wählt in jedem Schritt den
+// häufigsten noch übrigen Typ (der nicht dem letzten entspricht) – so
+// verteilt sich z. B. die große Zahl-Gruppe über den ganzen Feed.
+export function mixFeed(posts: FeedPost[]): FeedPost[] {
+  const remaining = posts.slice();
+  const out: FeedPost[] = [];
+  while (remaining.length) {
+    const lastTyp = out.length ? out[out.length - 1].typ : null;
+    const counts: Record<string, number> = {};
+    remaining.forEach((p) => (counts[p.typ] = (counts[p.typ] || 0) + 1));
+    let candidates = remaining.filter((p) => p.typ !== lastTyp);
+    if (!candidates.length) candidates = remaining.slice();
+    candidates.sort(
+      (a, b) => counts[b.typ] - counts[a.typ] || remaining.indexOf(a) - remaining.indexOf(b),
+    );
+    const chosen = candidates[0];
+    out.push(chosen);
+    remaining.splice(remaining.indexOf(chosen), 1);
+  }
+  return out;
+}
 
 // Rhythmus-Regel: nie zwei "rueckschritt" hintereinander; höchstens jede dritte
 // Karte darf "rueckschritt" sein. Ansonsten Reihenfolge (redaktioneller Wert) lassen.

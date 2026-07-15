@@ -7,13 +7,13 @@ import { fonts } from '../theme/fonts';
 import { FeedStackParamList } from '../navigation/types';
 import { Wordmark } from '../components/Wordmark';
 import { FeedCard } from '../components/feed2/FeedCards';
-import { FEED_POSTS, Lang, orderFeed } from '../data/feed';
+import { FEED_POSTS, Lang, mixFeed, orderFeed } from '../data/feed';
 
 type Props = NativeStackScreenProps<FeedStackParamList, 'FeedHome'>;
 
 export function FeedScreen({ navigation }: Props) {
   const [lang, setLang] = useState<Lang>('de');
-  const posts = useMemo(() => orderFeed(FEED_POSTS), []);
+  const posts = useMemo(() => orderFeed(mixFeed(FEED_POSTS)), []);
 
   const ctx = useMemo(
     () => ({

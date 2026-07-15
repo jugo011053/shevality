@@ -16,8 +16,6 @@ interface CardCtx {
   onOpenDiscover: () => void;
 }
 
-const clamp = (n: number) => Math.max(0, Math.min(100, n));
-
 // ---- geteilte Bausteine -------------------------------------------------
 
 function Eyebrow({ text, color }: { text: string; color: string }) {
@@ -131,27 +129,21 @@ function ctaPress(post: FeedPost, ctx: CardCtx) {
 // ---- Mini-Visualisierung für Statistiken -------------------------------
 
 function Viz({ viz, accent, lang }: { viz: ZahlViz; accent: string; lang: Lang }) {
-  if (viz.kind === 'percent') {
+  if (viz.kind === 'delta') {
+    const tones = {
+      up: { fg: '#4f7a63', bg: '#e7f0eb', arrow: '▲' },
+      down: { fg: '#a86b88', bg: '#f6edf1', arrow: '▼' },
+      flat: { fg: colors.muted, bg: '#efe9ed', arrow: '•' },
+    } as const;
+    const t = tones[viz.tone];
     return (
-      <View style={{ marginTop: 16 }}>
-        {!!viz.barLabel && (
-          <Text style={{ fontFamily: fonts.hanken500, fontSize: 11, color: colors.muted, marginBottom: 6 }}>{viz.barLabel[lang]}</Text>
-        )}
-        <View style={{ height: 12, borderRadius: 6, backgroundColor: '#ece5ea' }}>
-          <View style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${clamp(viz.value)}%`, backgroundColor: accent, borderRadius: 6 }} />
-          {viz.ref != null && (
-            <View style={{ position: 'absolute', left: `${clamp(viz.ref)}%`, top: -4, bottom: -4, width: 2, backgroundColor: colors.ink, opacity: 0.5 }} />
-          )}
-        </View>
-        {!!viz.refLabel && (
-          <Text style={{ fontFamily: fonts.hanken500, fontSize: 10.5, color: colors.mutedLight, marginTop: 6, textAlign: 'right' }}>
-            ▏ {viz.refLabel[lang]}
-          </Text>
-        )}
+      <View style={{ marginTop: 12, alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 7, backgroundColor: t.bg, borderRadius: 99, paddingVertical: 6, paddingHorizontal: 12 }}>
+        <Text style={{ fontSize: 11, color: t.fg }}>{t.arrow}</Text>
+        <Text style={{ fontFamily: fonts.hanken600, fontSize: 12, color: t.fg }}>{viz.text[lang]}</Text>
       </View>
     );
   }
-  // compare
+  // compare – zwei direkt beschriftete Vergleichsbalken
   const max = Math.max(viz.a.value, viz.b.value) || 1;
   const Row = ({ label, value, display, fill }: { label: string; value: number; display: string; fill: string }) => (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 9, marginTop: 8 }}>
@@ -181,7 +173,7 @@ function ZahlCard({ post, ctx }: { post: ZahlPost; ctx: CardCtx }) {
         <View style={{ flex: 1 }}>
           <Eyebrow text={FEED_UI.eyebrow.zahl[lang]} color={accent} />
           <Text style={{ fontFamily: fonts.young, fontSize: 50, lineHeight: 56, color: accent, letterSpacing: -1, marginTop: 8 }}>{post.stat[lang]}</Text>
-          {!!post.statSub && <Text style={{ fontFamily: fonts.hanken500, fontSize: 12.5, color: colors.pink, marginTop: 2 }}>{post.statSub[lang]}</Text>}
+          {!post.viz && !!post.statSub && <Text style={{ fontFamily: fonts.hanken500, fontSize: 12.5, color: colors.pink, marginTop: 2 }}>{post.statSub[lang]}</Text>}
         </View>
         <ArchImage uri={post.image} height={54} radiusTop={22} radiusBottom={12} style={{ width: 54, flexShrink: 0, marginTop: 2 }} />
       </View>
