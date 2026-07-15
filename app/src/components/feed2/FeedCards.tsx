@@ -5,6 +5,7 @@ import { fonts } from '../../theme/fonts';
 import { useAppState } from '../../state/AppState';
 import { ArchImage } from '../ArchImage';
 import { Wordmark } from '../Wordmark';
+import { buildShareImage } from '../../lib/shareImage';
 import {
   EventPost, FeedPost, FEED_ACCENT, FEED_UI, GlobalLokalPost, Lang,
   NeuGelistetPost, PortraitPost, RueckschrittPost, ZahlPost, ZahlViz,
@@ -56,22 +57,45 @@ function Footer({ post, lang }: { post: FeedPost; lang: Lang }) {
   const [copied, setCopied] = useState(false);
   const saved = !!saves[post.id];
 
+  const flash = () => {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
+
   const onShare = async () => {
     const text = post.share[lang].join('\n') + '\n\n— shevality';
+    if (Platform.OS !== 'web') {
+      try { await Share.share({ message: text }); } catch { /* still */ }
+      return;
+    }
+    // Web: gestaltetes Marken-Bild erzeugen und teilen (Spotify-Stil).
+    const nav: any = typeof navigator !== 'undefined' ? navigator : null;
+    const doc: any = typeof document !== 'undefined' ? document : null;
     try {
-      if (Platform.OS === 'web') {
-        const nav: any = typeof navigator !== 'undefined' ? navigator : null;
-        if (nav && nav.share) await nav.share({ text });
-        else if (nav && nav.clipboard) {
-          await nav.clipboard.writeText(text);
-          setCopied(true);
-          setTimeout(() => setCopied(false), 1800);
-        }
-      } else {
-        await Share.share({ message: text });
+      const blob = await buildShareImage(post, lang);
+      const file = new File([blob], 'shevality.png', { type: 'image/png' });
+      if (nav && nav.canShare && nav.canShare({ files: [file] })) {
+        await nav.share({ files: [file], title: 'Shevality' });
+      } else if (doc) {
+        // Kein Datei-Teilen (meist Desktop): Bild herunterladen.
+        const url = URL.createObjectURL(blob);
+        const a = doc.createElement('a');
+        a.href = url;
+        a.download = 'shevality.png';
+        a.click();
+        URL.revokeObjectURL(url);
+        flash();
       }
     } catch {
-      /* abgebrochen – bewusst still */
+      // Fallback: Text in die Zwischenablage.
+      try {
+        if (nav && nav.clipboard) {
+          await nav.clipboard.writeText(text);
+          flash();
+        }
+      } catch {
+        /* still */
+      }
     }
   };
 

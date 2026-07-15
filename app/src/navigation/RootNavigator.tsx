@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FeedStackParamList, EntdeckenStackParamList, SicherStackParamList, RootTabParamList } from './types';
 import { FeedScreen } from '../screens/FeedScreen';
-import { StoryDetailScreen } from '../screens/StoryDetailScreen';
+import { GemerktScreen } from '../screens/GemerktScreen';
 import { EntdeckenScreen } from '../screens/EntdeckenScreen';
 import { MapScreen } from '../screens/MapScreen';
 import { BusinessDetailScreen } from '../screens/BusinessDetailScreen';
@@ -19,7 +19,7 @@ function FeedStackNavigator() {
   return (
     <FeedStack.Navigator screenOptions={{ headerShown: false }}>
       <FeedStack.Screen name="FeedHome" component={FeedScreen} />
-      <FeedStack.Screen name="StoryDetail" component={StoryDetailScreen} />
+      <FeedStack.Screen name="Gemerkt" component={GemerktScreen} />
     </FeedStack.Navigator>
   );
 }
@@ -27,8 +27,8 @@ function FeedStackNavigator() {
 function EntdeckenStackNavigator() {
   return (
     <EntdeckenStack.Navigator screenOptions={{ headerShown: false }}>
-      <EntdeckenStack.Screen name="EntdeckenHome" component={EntdeckenScreen} />
-      <EntdeckenStack.Screen name="EntdeckenMap" component={MapScreen} />
+      <EntdeckenStack.Screen name="EntdeckenHome" component={MapScreen} />
+      <EntdeckenStack.Screen name="EntdeckenList" component={EntdeckenScreen} />
       <EntdeckenStack.Screen name="BusinessDetail" component={BusinessDetailScreen} />
     </EntdeckenStack.Navigator>
   );

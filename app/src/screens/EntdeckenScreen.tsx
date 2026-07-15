@@ -11,7 +11,7 @@ import { EntdeckenStackParamList } from '../navigation/types';
 import { ArchImage } from '../components/ArchImage';
 import { SearchIcon } from '../components/Icons';
 
-type Props = NativeStackScreenProps<EntdeckenStackParamList, 'EntdeckenHome'>;
+type Props = NativeStackScreenProps<EntdeckenStackParamList, 'EntdeckenList'>;
 
 const CRIT_KEYS = Object.keys(CRIT) as CritKey[];
 
@@ -69,7 +69,7 @@ export function EntdeckenScreen({ navigation }: Props) {
             <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 14, color: colors.pink, marginTop: 6 }}>Frauengeführt in Frankfurt</Text>
           </View>
           <Pressable
-            onPress={() => navigation.navigate('EntdeckenMap')}
+            onPress={() => navigation.navigate('EntdeckenHome')}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 9, paddingHorizontal: 14, borderRadius: 99, backgroundColor: colors.purple, marginTop: 4 }}
           >
             <Text style={{ fontSize: 13 }}>🗺️</Text>

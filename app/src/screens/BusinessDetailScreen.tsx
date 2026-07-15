@@ -8,6 +8,7 @@ import { BUSINESSES, CRIT } from '../data/constants';
 import { CritKey } from '../data/types';
 import { EntdeckenStackParamList } from '../navigation/types';
 import { ArchImage } from '../components/ArchImage';
+import { useAppState } from '../state/AppState';
 
 type Props = NativeStackScreenProps<EntdeckenStackParamList, 'BusinessDetail'>;
 
@@ -24,8 +25,10 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 
 export function BusinessDetailScreen({ route, navigation }: Props) {
   const { id } = route.params;
+  const { saves, toggleSave } = useAppState();
   const business = useMemo(() => BUSINESSES.find((b) => b.id === id), [id]);
   if (!business) return null;
+  const saved = !!saves[business.id];
 
   const critList = CRIT_KEYS.map((k) => {
     const met = business.crit[k];
@@ -42,10 +45,17 @@ export function BusinessDetailScreen({ route, navigation }: Props) {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={['top']}>
-      <View style={{ paddingHorizontal: 22, paddingTop: 8, paddingBottom: 6 }}>
-        <Pressable onPress={() => navigation.goBack()} style={{ flexDirection: 'row', alignItems: 'center', gap: 7, alignSelf: 'flex-start' }}>
+      <View style={{ paddingHorizontal: 22, paddingTop: 8, paddingBottom: 6, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Pressable onPress={() => navigation.goBack()} style={{ flexDirection: 'row', alignItems: 'center', gap: 7 }}>
           <Text style={{ fontSize: 17, color: colors.ink }}>‹</Text>
-          <Text style={{ fontFamily: fonts.hanken600, fontSize: 13, color: colors.ink }}>Entdecken</Text>
+          <Text style={{ fontFamily: fonts.hanken600, fontSize: 13, color: colors.ink }}>Zurück</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => toggleSave(business.id)}
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 5, paddingVertical: 7, paddingHorizontal: 13, borderRadius: 99, borderWidth: 1.4, borderColor: saved ? colors.purple : colors.cardBorder, backgroundColor: saved ? colors.purpleLight : colors.white }}
+        >
+          <Text style={{ fontSize: 12, color: saved ? colors.purple : colors.muted }}>{saved ? '✓' : '☆'}</Text>
+          <Text style={{ fontFamily: fonts.hanken600, fontSize: 12, color: saved ? colors.purple : colors.muted }}>{saved ? 'Gemerkt' : 'Merken'}</Text>
         </Pressable>
       </View>
 

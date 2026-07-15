@@ -3,11 +3,12 @@ import { NavigatorScreenParams } from '@react-navigation/native';
 export type FeedStackParamList = {
   FeedHome: undefined;
   StoryDetail: { id: string };
+  Gemerkt: undefined;
 };
 
 export type EntdeckenStackParamList = {
-  EntdeckenHome: undefined;
-  EntdeckenMap: undefined;
+  EntdeckenHome: undefined; // Karte (Standard-Ansicht)
+  EntdeckenList: undefined; // Liste
   BusinessDetail: { id: string };
 };
 

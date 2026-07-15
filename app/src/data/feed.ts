@@ -98,7 +98,7 @@ export const FEED_UI = {
   share: { de: 'Teilen', en: 'Share' },
   saved: { de: 'Gemerkt', en: 'Saved' },
   save: { de: 'Merken', en: 'Save' },
-  copied: { de: 'Kopiert ✓', en: 'Copied ✓' },
+  copied: { de: 'Fertig ✓', en: 'Done ✓' },
   handlungTitle: { de: 'Was jetzt zählt', en: 'What matters now' },
   closing: {
     de: { title: 'Du bist auf dem Stand.', sub: 'Kein Endlos-Scroll. Das ist Haltung, kein Fehler.' },

@@ -30,21 +30,29 @@ export function FeedScreen({ navigation }: Props) {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={['top']}>
       <View style={{ paddingHorizontal: 24, paddingTop: 8, paddingBottom: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Wordmark />
-        <View style={{ flexDirection: 'row', backgroundColor: colors.white, borderRadius: 99, borderWidth: 1, borderColor: colors.cardBorder, padding: 2 }}>
-          {(['de', 'en'] as Lang[]).map((l) => {
-            const active = lang === l;
-            return (
-              <Pressable
-                key={l}
-                onPress={() => setLang(l)}
-                style={{ paddingVertical: 5, paddingHorizontal: 12, borderRadius: 99, backgroundColor: active ? colors.purple : 'transparent' }}
-              >
-                <Text style={{ fontFamily: fonts.hanken700, fontSize: 11.5, letterSpacing: 0.5, color: active ? colors.white : colors.muted }}>
-                  {l.toUpperCase()}
-                </Text>
-              </Pressable>
-            );
-          })}
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <Pressable
+            onPress={() => navigation.navigate('Gemerkt')}
+            style={{ width: 38, height: 38, borderRadius: 99, borderWidth: 1, borderColor: colors.cardBorder, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center' }}
+          >
+            <Text style={{ fontSize: 16, color: colors.purple }}>☆</Text>
+          </Pressable>
+          <View style={{ flexDirection: 'row', backgroundColor: colors.white, borderRadius: 99, borderWidth: 1, borderColor: colors.cardBorder, padding: 2 }}>
+            {(['de', 'en'] as Lang[]).map((l) => {
+              const active = lang === l;
+              return (
+                <Pressable
+                  key={l}
+                  onPress={() => setLang(l)}
+                  style={{ paddingVertical: 5, paddingHorizontal: 12, borderRadius: 99, backgroundColor: active ? colors.purple : 'transparent' }}
+                >
+                  <Text style={{ fontFamily: fonts.hanken700, fontSize: 11.5, letterSpacing: 0.5, color: active ? colors.white : colors.muted }}>
+                    {l.toUpperCase()}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
         </View>
       </View>
 
