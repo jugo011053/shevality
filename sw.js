@@ -2,7 +2,7 @@
 // Zweck: macht die Web-App "installierbar" (zum Homescreen hinzufügen) und
 // sorgt für ein bisschen Offline-Fähigkeit. Bei jedem neuen Deploy die
 // Version hochzählen, damit alte Dateien sauber ersetzt werden.
-const CACHE = 'shevality-v3';
+const CACHE = 'shevality-v4';
 
 self.addEventListener('install', () => {
   self.skipWaiting();
