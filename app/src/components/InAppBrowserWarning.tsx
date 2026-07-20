@@ -3,26 +3,50 @@ import { Platform, Text, View } from 'react-native';
 import { colors } from '../theme/colors';
 import { fonts } from '../theme/fonts';
 
-// iOS/Android können wir per Webseite NICHT zwingen, einen Link in Safari/Chrome
-// zu öffnen — das entscheidet allein das Betriebssystem bzw. die App, aus der
-// heraus getippt wurde. Was wir tun können: erkennen, wenn wir in einem
-// eingebauten Mini-Browser (Instagram, Facebook, TikTok, WhatsApp, LinkedIn,
-// Snapchat, WeChat …) laufen, und klar sagen, wie man in den echten Browser
-// wechselt — dort funktioniert "Zum Home-Bildschirm hinzufügen" zuverlässig.
-function isInAppBrowser(): boolean {
-  if (Platform.OS !== 'web' || typeof navigator === 'undefined') return false;
+// Eine Webseite kann iOS/Android NICHT zwingen, einen Link in einem
+// bestimmten Browser zu öffnen — das entscheidet allein das Betriebssystem
+// (Standard-Browser-Einstellung) bzw. die App, aus der heraus getippt wurde.
+// Was wir tun können: erkennen, wann das echte "Zum Home-Bildschirm
+// hinzufügen" (PWA-Install) nicht zuverlässig geht, und den funktionierenden
+// Weg zeigen. Zwei Fälle:
+//  1) Eingebauter Mini-Browser (Instagram, TikTok, WhatsApp, …) → "Im
+//     Browser öffnen" antippen.
+//  2) iOS, aber Standard-Browser ist NICHT Safari (z. B. Chrome/Firefox) →
+//     Auf iOS unterstützt nur Safari echte PWA-Installation. Der Link muss
+//     einmal gedrückt gehalten und "In Safari öffnen" gewählt werden — das
+//     ist der einzige Weg, den iOS dafür zulässt.
+function detect(): 'inapp' | 'ios-non-safari' | null {
+  if (Platform.OS !== 'web' || typeof navigator === 'undefined') return null;
   const ua = navigator.userAgent || '';
-  return /FBAN|FBAV|FB_IAB|Instagram|Messenger|Line\/|MicroMessenger|TikTok|musical_ly|LinkedInApp|Snapchat|Twitter/i.test(ua);
+  if (/FBAN|FBAV|FB_IAB|Instagram|Messenger|Line\/|MicroMessenger|TikTok|musical_ly|LinkedInApp|Snapchat|Twitter/i.test(ua)) {
+    return 'inapp';
+  }
+  const isIOS = /iphone|ipad|ipod/i.test(ua);
+  const isNonSafariIOSBrowser = /CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo|Mercury/i.test(ua);
+  if (isIOS && isNonSafariIOSBrowser) return 'ios-non-safari';
+  return null;
 }
 
+const COPY: Record<'inapp' | 'ios-non-safari', { title: string; sub: string }> = {
+  inapp: {
+    title: 'Für die beste Erfahrung: oben auf ⋯ tippen und „Im Browser öffnen" wählen.',
+    sub: 'Nur im echten Browser lässt sich Shevality zum Startbildschirm hinzufügen.',
+  },
+  'ios-non-safari': {
+    title: 'Diesen Link gedrückt halten und „In Safari öffnen" wählen.',
+    sub: 'Auf dem iPhone funktioniert „Zum Home-Bildschirm hinzufügen" nur in Safari — auch wenn ein anderer Browser dein Standard ist.',
+  },
+};
+
 export function InAppBrowserWarning() {
-  const [show, setShow] = useState(false);
+  const [kind, setKind] = useState<'inapp' | 'ios-non-safari' | null>(null);
 
   useEffect(() => {
-    setShow(isInAppBrowser());
+    setKind(detect());
   }, []);
 
-  if (!show) return null;
+  if (!kind) return null;
+  const copy = COPY[kind];
 
   return (
     <View
@@ -32,12 +56,8 @@ export function InAppBrowserWarning() {
         paddingHorizontal: 18, paddingTop: Platform.OS === 'ios' ? 50 : 14, paddingBottom: 12,
       }}
     >
-      <Text style={{ fontFamily: fonts.hanken700, fontSize: 12.5, color: '#8A6D3B' }}>
-        Für die beste Erfahrung: oben rechts auf ⋯ tippen und „Im Browser öffnen" wählen.
-      </Text>
-      <Text style={{ fontFamily: fonts.hanken400, fontSize: 11.5, lineHeight: 16, color: '#8A6D3B', marginTop: 3 }}>
-        Nur im echten Browser (Safari/Chrome) lässt sich Shevality zum Startbildschirm hinzufügen.
-      </Text>
+      <Text style={{ fontFamily: fonts.hanken700, fontSize: 12.5, color: '#8A6D3B' }}>{copy.title}</Text>
+      <Text style={{ fontFamily: fonts.hanken400, fontSize: 11.5, lineHeight: 16, color: '#8A6D3B', marginTop: 3 }}>{copy.sub}</Text>
     </View>
   );
 }
