@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -6,26 +6,16 @@ import { colors } from '../theme/colors';
 import { fonts } from '../theme/fonts';
 import { FeedStackParamList } from '../navigation/types';
 import { Wordmark } from '../components/Wordmark';
-import { FeedCard } from '../components/feed2/FeedCards';
-import { FEED_POSTS, Lang, mixFeed, orderFeed } from '../data/feed';
+import { ImpulsCard } from '../components/ImpulsCard';
+import { InstallHint } from '../components/InstallHint';
+import { IMPULSES } from '../data/impulses';
 import { useLang } from '../state/LangContext';
+import { Lang } from '../data/feed';
 
 type Props = NativeStackScreenProps<FeedStackParamList, 'FeedHome'>;
 
 export function FeedScreen({ navigation }: Props) {
   const { lang, setLang } = useLang();
-  const posts = useMemo(() => orderFeed(mixFeed(FEED_POSTS)), []);
-
-  const ctx = useMemo(
-    () => ({
-      lang,
-      onOpenBusiness: (id: string) =>
-        (navigation.getParent() as any)?.navigate('Entdecken', { screen: 'BusinessDetail', params: { id } }),
-      onOpenDiscover: () =>
-        (navigation.getParent() as any)?.navigate('Entdecken', { screen: 'EntdeckenHome' }),
-    }),
-    [lang, navigation],
-  );
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={['top']}>
@@ -58,10 +48,21 @@ export function FeedScreen({ navigation }: Props) {
       </View>
 
       <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 4, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
-        {posts.map((post) => (
-          <FeedCard key={post.id} post={post} ctx={ctx} />
+        {IMPULSES.map((impuls) => (
+          <ImpulsCard key={impuls.id} impuls={impuls} />
         ))}
+
+        <View style={{ alignItems: 'center', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 }}>
+          <View style={{ width: 34, height: 1, backgroundColor: colors.hairlineStrong, marginBottom: 18 }} />
+          <Text style={{ fontFamily: fonts.young, fontSize: 22, color: colors.ink, textAlign: 'center', letterSpacing: -0.3 }}>
+            Du bist auf dem Stand.
+          </Text>
+          <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 13.5, color: colors.mutedLight, textAlign: 'center', marginTop: 8, lineHeight: 19 }}>
+            Kein Endlos-Scroll. Schau später wieder vorbei.
+          </Text>
+        </View>
       </ScrollView>
+      <InstallHint />
     </SafeAreaView>
   );
 }

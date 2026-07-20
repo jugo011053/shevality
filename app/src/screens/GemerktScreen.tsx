@@ -7,9 +7,9 @@ import { fonts } from '../theme/fonts';
 import { FeedStackParamList } from '../navigation/types';
 import { useAppState } from '../state/AppState';
 import { useLang } from '../state/LangContext';
-import { FeedCard } from '../components/feed2/FeedCards';
+import { ImpulsCard } from '../components/ImpulsCard';
 import { ArchImage } from '../components/ArchImage';
-import { FEED_POSTS } from '../data/feed';
+import { IMPULSES } from '../data/impulses';
 import { BUSINESSES } from '../data/constants';
 
 type Props = NativeStackScreenProps<FeedStackParamList, 'Gemerkt'>;
@@ -19,21 +19,12 @@ export function GemerktScreen({ navigation }: Props) {
   const { saves } = useAppState();
 
   const savedBusinesses = useMemo(() => BUSINESSES.filter((b) => saves[b.id]), [saves]);
-  const savedPosts = useMemo(() => FEED_POSTS.filter((p) => saves[p.id]), [saves]);
+  const savedImpulses = useMemo(() => IMPULSES.filter((p) => saves[p.id]), [saves]);
 
   const openBusiness = (id: string) =>
     (navigation.getParent() as any)?.navigate('Entdecken', { screen: 'BusinessDetail', params: { id } });
 
-  const ctx = useMemo(
-    () => ({
-      lang,
-      onOpenBusiness: openBusiness,
-      onOpenDiscover: () => (navigation.getParent() as any)?.navigate('Entdecken', { screen: 'EntdeckenHome' }),
-    }),
-    [lang, navigation],
-  );
-
-  const empty = savedBusinesses.length === 0 && savedPosts.length === 0;
+  const empty = savedBusinesses.length === 0 && savedImpulses.length === 0;
   const t = {
     title: lang === 'de' ? 'Gemerkt' : 'Saved',
     back: lang === 'de' ? 'Feed' : 'Feed',
@@ -82,11 +73,11 @@ export function GemerktScreen({ navigation }: Props) {
           </View>
         )}
 
-        {savedPosts.length > 0 && (
+        {savedImpulses.length > 0 && (
           <View style={{ marginTop: 20 }}>
             <Text style={{ fontFamily: fonts.hanken700, fontSize: 11, letterSpacing: 1.2, color: colors.pink }}>{t.posts.toUpperCase()}</Text>
-            {savedPosts.map((post) => (
-              <FeedCard key={post.id} post={post} ctx={ctx} />
+            {savedImpulses.map((impuls) => (
+              <ImpulsCard key={impuls.id} impuls={impuls} />
             ))}
           </View>
         )}

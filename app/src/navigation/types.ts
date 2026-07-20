@@ -21,4 +21,14 @@ export type RootTabParamList = {
   Feed: NavigatorScreenParams<FeedStackParamList>;
   Entdecken: NavigatorScreenParams<EntdeckenStackParamList>;
   Sicher: NavigatorScreenParams<SicherStackParamList>;
+  Netzwerke: undefined;
+};
+
+export type RootStackParamList = {
+  Landing: undefined;
+  Consent: undefined;
+  Questionnaire: undefined;
+  Result: undefined;
+  Register: undefined;
+  MainTabs: NavigatorScreenParams<RootTabParamList>;
 };

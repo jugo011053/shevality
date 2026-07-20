@@ -15,7 +15,8 @@ import {
 import { colors } from './src/theme/colors';
 import { AppStateProvider } from './src/state/AppState';
 import { LangProvider } from './src/state/LangContext';
-import { RootNavigator } from './src/navigation/RootNavigator';
+import { OnboardingProvider } from './src/state/OnboardingState';
+import { AppRoot } from './src/navigation/AppRoot';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -41,9 +42,11 @@ export default function App() {
       <SafeAreaProvider>
         <AppStateProvider>
           <LangProvider>
-            <NavigationContainer>
-              <RootNavigator />
-            </NavigationContainer>
+            <OnboardingProvider>
+              <NavigationContainer>
+                <AppRoot />
+              </NavigationContainer>
+            </OnboardingProvider>
           </LangProvider>
         </AppStateProvider>
       </SafeAreaProvider>

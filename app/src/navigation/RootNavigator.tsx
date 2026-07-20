@@ -9,7 +9,9 @@ import { MapScreen } from '../screens/MapScreen';
 import { BusinessDetailScreen } from '../screens/BusinessDetailScreen';
 import { SuggestScreen } from '../screens/SuggestScreen';
 import { SicherScreen } from '../screens/SicherScreen';
+import { NetworksScreen } from '../screens/NetworksScreen';
 import { CustomTabBar } from '../components/CustomTabBar';
+import { FLAGS } from '../config/flags';
 
 const FeedStack = createNativeStackNavigator<FeedStackParamList>();
 const EntdeckenStack = createNativeStackNavigator<EntdeckenStackParamList>();
@@ -44,12 +46,15 @@ function SicherStackNavigator() {
   );
 }
 
+// Die eigentliche "drin"-App: Feed + Sicher sind immer da. Entdecken (Karte)
+// und Netzwerke hängen hinter den Feature-Flags in src/config/flags.ts.
 export function RootNavigator() {
   return (
     <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />} screenOptions={{ headerShown: false }}>
       <Tab.Screen name="Feed" component={FeedStackNavigator} />
-      <Tab.Screen name="Entdecken" component={EntdeckenStackNavigator} />
       <Tab.Screen name="Sicher" component={SicherStackNavigator} />
+      {FLAGS.SHOW_MAP && <Tab.Screen name="Entdecken" component={EntdeckenStackNavigator} />}
+      {FLAGS.SHOW_NETWORKS && <Tab.Screen name="Netzwerke" component={NetworksScreen} />}
     </Tab.Navigator>
   );
 }

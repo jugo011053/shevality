@@ -15,9 +15,9 @@ const T = {
   title: { de: 'Sicher', en: 'Safety' },
   tagline: { de: 'Schnelle Hilfe & sichere Wege — ohne Suchen', en: 'Fast help & safe routes — no searching' },
   policeTitle: { de: 'Polizei-Notruf', en: 'Police emergency' },
-  policeSub: { de: 'Bei akuter Gefahr', en: 'In acute danger' },
+  policeSub: { de: 'Bei akuter Gefahr · ✓ bundesweit', en: 'In acute danger · ✓ nationwide' },
   helplineTitle: { de: 'Hilfetelefon 116 016', en: 'Helpline 116 016' },
-  helplineSub: { de: 'Gewalt gegen Frauen · kostenlos & anonym, 24/7', en: 'Violence against women · free & anonymous, 24/7' },
+  helplineSub: { de: 'Gewalt gegen Frauen · kostenlos, anonym, 24/7 · ✓ bundesweit', en: 'Violence against women · free, anonymous, 24/7 · ✓ nationwide' },
   call: { de: 'Anrufen', en: 'Call' },
   homeTitle: { de: 'Sicher nach Hause', en: 'Getting home safely' },
   locationTitle: { de: 'Standort teilen', en: 'Share location' },
@@ -25,9 +25,11 @@ const T = {
   companyTitle: { de: 'Heimweg-Begleitung', en: 'Walk-home companion' },
   companySub: { de: 'Jemand bleibt am Telefon', en: 'Someone stays on the phone' },
   adviceTitle: { de: 'Beratung in Frankfurt', en: 'Counselling in Frankfurt' },
+  unverified: { de: 'noch zu verifizieren', en: 'not yet verified' },
+  numberPending: { de: 'Nummer folgt', en: 'Number coming soon' },
   disclaimer: {
-    de: '110 und 116 016 sind kostenlose, bundesweite Nummern. Weitere Angaben sind Beispiele für den Prototyp.',
-    en: '110 and 116 016 are free, nationwide numbers. Other entries are prototype examples.',
+    de: '110 und 116 016 sind kostenlose, bundesweite Nummern. Andere Kontakte sind noch nicht amtlich verifiziert.',
+    en: '110 and 116 016 are free, nationwide numbers. Other contacts are not yet officially verified.',
   },
 };
 
@@ -110,15 +112,28 @@ export function SicherScreen() {
                 style={{ flexDirection: 'row', alignItems: 'center', gap: 14, paddingVertical: 15, borderTopWidth: 1, borderTopColor: colors.hairlineMed }}
               >
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontFamily: fonts.hanken600, fontSize: 14.5, color: colors.ink }}>{c.name}</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7 }}>
+                    <Text style={{ fontFamily: fonts.hanken600, fontSize: 14.5, color: colors.ink }}>{c.name}</Text>
+                    {!c.verified && (
+                      <View style={{ paddingVertical: 2, paddingHorizontal: 8, borderRadius: 99, backgroundColor: '#FBF3E7' }}>
+                        <Text style={{ fontFamily: fonts.hanken600, fontSize: 9.5, color: '#8A6D3B' }}>{t(T.unverified)}</Text>
+                      </View>
+                    )}
+                  </View>
                   <Text style={{ fontFamily: fonts.hanken400, fontSize: 12, color: colors.muted, marginTop: 3 }}>{c.desc}</Text>
                 </View>
-                <Pressable
-                  onPress={() => call(c.number)}
-                  style={{ flexDirection: 'row', alignItems: 'center', gap: 7, paddingVertical: 8, paddingHorizontal: 14, borderRadius: 99, borderWidth: 1.4, borderColor: colors.purple }}
-                >
-                  <Text style={{ fontFamily: fonts.hanken600, fontSize: 12, color: colors.purple }}>{c.number}</Text>
-                </Pressable>
+                {c.number ? (
+                  <Pressable
+                    onPress={() => call(c.number)}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: 7, paddingVertical: 8, paddingHorizontal: 14, borderRadius: 99, borderWidth: 1.4, borderColor: colors.purple }}
+                  >
+                    <Text style={{ fontFamily: fonts.hanken600, fontSize: 12, color: colors.purple }}>{c.number}</Text>
+                  </Pressable>
+                ) : (
+                  <View style={{ paddingVertical: 8, paddingHorizontal: 14, borderRadius: 99, borderWidth: 1.4, borderColor: colors.hairlineBorder }}>
+                    <Text style={{ fontFamily: fonts.hanken500, fontSize: 12, color: colors.mutedLight }}>{t(T.numberPending)}</Text>
+                  </View>
+                )}
               </View>
             ))}
           </View>

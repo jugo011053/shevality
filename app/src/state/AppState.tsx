@@ -5,9 +5,11 @@ interface AppStateValue {
   likes: Record<string, boolean>;
   saves: Record<string, boolean>;
   comments: Record<string, Comment[]>;
+  reactions: Record<string, string>;
   toggleLike: (id: string) => void;
   toggleSave: (id: string) => void;
   addComment: (id: string, text: string) => void;
+  setReaction: (id: string, value: string) => void;
 }
 
 const AppStateContext = createContext<AppStateValue | null>(null);
@@ -16,12 +18,14 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [likes, setLikes] = useState<Record<string, boolean>>({});
   const [saves, setSaves] = useState<Record<string, boolean>>({});
   const [comments, setComments] = useState<Record<string, Comment[]>>({});
+  const [reactions, setReactions] = useState<Record<string, string>>({});
 
   const value = useMemo<AppStateValue>(
     () => ({
       likes,
       saves,
       comments,
+      reactions,
       toggleLike: (id) => setLikes((s) => ({ ...s, [id]: !s[id] })),
       toggleSave: (id) => setSaves((s) => ({ ...s, [id]: !s[id] })),
       addComment: (id, text) => {
@@ -33,8 +37,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
           return { ...s, [id]: list };
         });
       },
+      setReaction: (id, val) => setReactions((s) => ({ ...s, [id]: val })),
     }),
-    [likes, saves, comments]
+    [likes, saves, comments, reactions]
   );
 
   return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;

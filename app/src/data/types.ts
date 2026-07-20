@@ -89,7 +89,8 @@ export type FeedItem = ArticleFeedItem | EventFeedItem | FactFeedItem | QuoteFee
 export interface Contact {
   name: string;
   desc: string;
-  number: string;
+  number: string; // leer = Nummer wird noch ergänzt (kein Anruf-Button)
+  verified: boolean; // true = amtliche, bundesweit bekannte Nummer
 }
 
 export type FeedTabKey = 'fuer-dich' | 'lokal' | 'welt' | 'wissen' | 'gemerkt';

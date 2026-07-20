@@ -193,8 +193,9 @@ export const FEED: FeedItem[] = [
 ];
 
 export const CONTACTS: Contact[] = [
-  { name: 'Frauennotruf Frankfurt', desc: 'Beratung bei sexualisierter Gewalt', number: '069 70 94 94' },
-  { name: 'Frauenhaus Frankfurt', desc: 'Schutz & sichere Unterkunft', number: '069 79 51 10' },
-  { name: 'FeM Mädchenhaus', desc: 'Beratung für Mädchen & junge Frauen', number: '069 95 92 92 0' },
-  { name: 'Heimweg-Telefon', desc: 'Begleitung am Telefon nach Hause', number: '030 12 074 182' },
+  { name: 'Frauennotruf Frankfurt', desc: 'Beratung bei sexualisierter Gewalt', number: '069 70 94 94', verified: false },
+  { name: 'Frauenhaus Frankfurt', desc: 'Schutz & sichere Unterkunft', number: '069 79 51 10', verified: false },
+  { name: 'FeM Mädchenhaus', desc: 'Beratung für Mädchen & junge Frauen', number: '069 95 92 92 0', verified: false },
+  { name: 'Heimweg-Telefon', desc: 'Begleitung am Telefon nach Hause', number: '030 12 074 182', verified: false },
+  { name: 'Frauentaxi Frankfurt', desc: 'Sicher nach Hause', number: '', verified: false },
 ];

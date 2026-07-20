@@ -11,6 +11,7 @@ const TAB_META: Record<string, { label: { de: string; en: string }; Icon: typeof
   Feed: { label: { de: 'Feed', en: 'Feed' }, Icon: TabFeedIcon },
   Entdecken: { label: { de: 'Entdecken', en: 'Discover' }, Icon: TabEntdeckenIcon },
   Sicher: { label: { de: 'Sicher', en: 'Safety' }, Icon: TabSicherIcon },
+  Netzwerke: { label: { de: 'Netzwerke', en: 'Networks' }, Icon: TabEntdeckenIcon },
 };
 
 export function CustomTabBar({ state, navigation }: BottomTabBarProps) {
