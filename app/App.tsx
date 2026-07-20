@@ -17,6 +17,7 @@ import { AppStateProvider } from './src/state/AppState';
 import { LangProvider } from './src/state/LangContext';
 import { OnboardingProvider } from './src/state/OnboardingState';
 import { AppRoot } from './src/navigation/AppRoot';
+import { InAppBrowserWarning } from './src/components/InAppBrowserWarning';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -50,6 +51,7 @@ export default function App() {
           </LangProvider>
         </AppStateProvider>
       </SafeAreaProvider>
+      <InAppBrowserWarning />
       <StatusBar style="dark" />
     </View>
   );
