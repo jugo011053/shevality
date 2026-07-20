@@ -1,8 +1,74 @@
 # Shevality – Handoff für die nächste KI-Session
 
-Stand: 15.07.2026. Dieses Dokument ist für eine andere KI/Session gedacht, die
-hier weiterarbeitet. Der Nutzer (Janik) ist Anfänger – einfach erklären,
-auf Deutsch, Handgriffe möglichst selbst übernehmen.
+Stand: 15.07.2026 (nachmittags, nach Produkt-Pivot). Dieses Dokument ist für
+eine andere KI/Session gedacht, die hier weiterarbeitet. Der Nutzer (Janik)
+ist Anfänger – einfach erklären, auf Deutsch, Handgriffe möglichst selbst
+übernehmen.
+
+## ⚠️ Wichtig: Produkt-Pivot am 15.07. (nachmittags)
+
+Der untere Teil dieses Dokuments (Karte, Entdecken-first, Business-Feed mit
+6 Kartentypen) beschreibt den **vorherigen** Produktstand. Am Nachmittag des
+15.07. kam ein neuer, deutlich genauerer Auftrag: Shevality wird jetzt primär
+als **Straßen-Prototyp mit vorgeschaltetem Fragebogen** verstanden (Frauen
+scannen einen QR-Code, füllen einen Fragebogen aus, bekommen danach Zugang
+zur App). Das wurde **zusätzlich** eingebaut, ohne den alten Code zu löschen:
+
+- **Neuer Einstiegs-Flow vor der eigentlichen App:** `app/src/navigation/AppRoot.tsx`
+  ist jetzt der echte Wurzel-Navigator (Stack): `Landing → Consent →
+  Questionnaire → Result → Register → MainTabs`. `MainTabs` ist der alte
+  `RootNavigator` (Tab-Navigator), unverändert eingehängt.
+- **Fragebogen ist Daten-getrieben:** `app/src/data/questionnaire.ts`
+  (`QUESTIONS`-Array, `QUESTIONNAIRE_VERSION`). Bei inhaltlichen Änderungen
+  Version hochzählen — Vorher-/Nachmessung müssen dieselbe Version haben.
+- **Zustand getrennt gehalten** (für spätere Supabase-Anbindung als zwei
+  Tabellen gedacht): `app/src/state/OnboardingState.tsx` — `identity`
+  (participantId + Kontakt) und `response` (participantId + Antworten)
+  sind bewusst zwei getrennte Objekte/localStorage-Keys, nie zusammengeführt.
+  Aktuell **kein echtes Backend** — alles lokal im Browser (localStorage),
+  übersteht Neuladen.
+- **Feature-Flags:** `app/src/config/flags.ts` — `SHOW_MAP` und
+  `SHOW_NETWORKS`, beide aktuell `false`. Solange `SHOW_MAP=false` ist die
+  Karte/Entdecken-Tab (weiter unten in diesem Dokument beschrieben) **aus der
+  Tab-Bar entfernt**, nicht nur versteckt — der Code existiert weiter
+  (`RootNavigator.tsx` bindet ihn nur bei `FLAGS.SHOW_MAP===true` ein). Zum
+  Wiedereinschalten: Flag auf `true`, neu bauen (`npx expo export --platform
+  web`), `node scripts/pwa.mjs`, deployen (siehe unten).
+- **Feed wurde ersetzt**, nicht ergänzt: `FeedScreen.tsx` zeigt jetzt
+  `IMPULSES` aus `app/src/data/impulses.ts` (Frage + tippbare Reaktion,
+  danach simulierte Verteilung). Der alte 6-Kartentypen-Feed
+  (`app/src/data/feed.ts`, `app/src/components/feed2/FeedCards.tsx`) ist
+  **weiterhin im Repo, aber nirgends mehr eingebunden** — bewusst nicht
+  gelöscht, falls der Nutzer ihn zurückwill. Achtung bei künftigen Änderungen:
+  nicht versehentlich beide Systeme parallel pflegen.
+- **`app/src/data/impulses.ts` sind Platzhalter-Beispiel-Impulse** (5 Stück,
+  thematisch an den Fragebogen angelehnt), inklusive frei erfundener
+  `baseline`-Verteilungswerte ("so haben andere geantwortet" — es gibt noch
+  kein geteiltes Backend, das sind plausible Startwerte, denen die eigene
+  Antwort live hinzugefügt wird). Wenn ein echtes Backend kommt: `baseline`
+  durch echte Aggregation ersetzen.
+- **Sicher-Tab überarbeitet:** `CONTACTS` in `app/src/data/constants.ts`
+  haben jetzt ein `verified`-Feld; alle vier bisherigen lokalen Kontakte sind
+  `verified:false` und zeigen ein "noch zu verifizieren"-Badge. Neu:
+  "Frauentaxi Frankfurt" mit **leerer** `number` (bewusst keine erfundene
+  Telefonnummer bei einem Sicherheits-Feature) — wird als "Nummer folgt"
+  angezeigt, nicht anrufbar. 110 und 116 016 (fest im Screen, nicht in
+  `CONTACTS`) sind als "✓ bundesweit" gekennzeichnet.
+- **Installations-Hinweis** (`app/src/components/InstallHint.tsx`): dezenter,
+  wegklickbarer Banner, erscheint ~1,2 s nach Betreten der App (nicht
+  während des Onboardings), nur einmal (localStorage-Flag), nicht wenn schon
+  als PWA installiert (`display-mode: standalone`-Check).
+- **Ungetestet vom Nutzer** zum Zeitpunkt dieses Handoffs: der komplette neue
+  Flow wurde gebaut, `tsc --noEmit` läuft sauber durch, Build+Deploy waren
+  erfolgreich — aber niemand hat ihn auf einem echten Handy durchgeklickt.
+  Das sollte die nächste Session/der Nutzer als Erstes tun.
+- Die **Sprachumschaltung** (weiter unten im Dokument beschrieben,
+  `LangContext`) besteht unverändert fort und wirkt weiter auf Tab-Namen,
+  Sicher-Tab etc. — der neue Onboarding-Flow (Landing/Consent/Questionnaire/
+  Result/Register) ist aber **nur auf Deutsch** gebaut (die gelieferten
+  Fragebogen- und Einwilligungstexte waren Deutsch; keine Übersetzung
+  erfunden). Falls Englisch für den Fragebogen gebraucht wird, muss das
+  jemand mit echten Übersetzungen liefern.
 
 ## Repo & Branch
 
