@@ -59,16 +59,33 @@
 <body>
 <div id="map"></div>
 <div class="overlay">
-  <h1>Frauengeführt in Frankfurt</h1>
-  <p>20 Läden · tippe einen Punkt an</p>
+  <h1 id="ovTitle">Frauengeführt in Frankfurt</h1>
+  <p id="ovSub">20 Läden · tippe einen Punkt an</p>
   <div class="legend">
-    <div><span class="dot v"></span>geprüft</div>
-    <div><span class="dot u"></span>ungeprüft</div>
+    <div><span class="dot v"></span><span id="legV">geprüft</span></div>
+    <div><span class="dot u"></span><span id="legU">ungeprüft</span></div>
   </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+// Sprache aus dem URL-Parameter ?lang=de|en (Standard: de), gesteuert von der App.
+const LANG = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'de';
+const STR = {
+  de: { title: 'Frauengeführt in Frankfurt', sub: n => `${n} Läden · tippe einen Punkt an`, verified: 'geprüft', unverified: 'ungeprüft',
+        badgeV: '✓ von einer Frau geleitet', badgeU: '? geleitet · ungeprüft', owner: 'Inhaberin', route: 'Route', website: 'Website' },
+  en: { title: 'Women-led in Frankfurt', sub: n => `${n} places · tap a pin`, verified: 'verified', unverified: 'unverified',
+        badgeV: '✓ led by a woman', badgeU: '? led · unverified', owner: 'Owner', route: 'Directions', website: 'Website' },
+};
+const S = STR[LANG];
+const CAT_EN = { 'Café':'Café','Restaurant':'Restaurant','Bar':'Bar','Imbiss':'Snack bar','Suppenküche':'Soup kitchen','Gaststätte':'Inn','Pizzeria':'Pizzeria' };
+function catLabel(cat){ return LANG === 'en' ? (CAT_EN[cat] || cat) : cat; }
+
+document.getElementById('ovTitle').textContent = S.title;
+document.getElementById('legV').textContent = S.verified;
+document.getElementById('legU').textContent = S.unverified;
+</script>
 <script>
 const PLACES = [
   {name:"cà phê, ơi!",cat:"Café",hood:"Sachsenhausen",lat:50.0999591,lng:8.6815514,v:true,owner:"Quynh Nhu Nguyen",web:"https://www.capheoi.de/"},
@@ -104,18 +121,20 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
 
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 
+document.getElementById('ovSub').textContent = S.sub(PLACES.length);
+
 const bounds = [];
 PLACES.forEach(p=>{
   const icon = L.divIcon({className:"",html:`<div class="pin ${p.v?'v':'u'}"><span>${p.v?'✓':'?'}</span></div>`,
     iconSize:[28,28],iconAnchor:[14,28],popupAnchor:[0,-28]});
   const route = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
-  const web = p.web ? `<a class="ghost" href="${esc(p.web)}" target="_blank" rel="noopener">Website</a>` : "";
+  const web = p.web ? `<a class="ghost" href="${esc(p.web)}" target="_blank" rel="noopener">${S.website}</a>` : "";
   const html = `<div class="pop">
       <div class="pop-name">${esc(p.name)}</div>
-      <div class="pop-meta">${esc(p.cat)} · ${esc(p.hood)}</div>
-      <div class="pop-badge ${p.v?'v':'u'}">${p.v?'✓ von einer Frau geleitet':'? geleitet · ungeprüft'}</div>
-      <div class="pop-owner">Inhaberin: ${esc(p.owner)}</div>
-      <div class="pop-actions"><a class="primary" href="${route}" target="_blank" rel="noopener">Route</a>${web}</div>
+      <div class="pop-meta">${esc(catLabel(p.cat))} · ${esc(p.hood)}</div>
+      <div class="pop-badge ${p.v?'v':'u'}">${p.v?S.badgeV:S.badgeU}</div>
+      <div class="pop-owner">${S.owner}: ${esc(p.owner)}</div>
+      <div class="pop-actions"><a class="primary" href="${route}" target="_blank" rel="noopener">${S.route}</a>${web}</div>
     </div>`;
   L.marker([p.lat,p.lng],{icon}).addTo(map).bindPopup(html,{closeButton:true,maxWidth:260});
   bounds.push([p.lat,p.lng]);
