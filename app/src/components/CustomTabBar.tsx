@@ -4,16 +4,18 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../theme/colors';
 import { fonts } from '../theme/fonts';
+import { useLang } from '../state/LangContext';
 import { TabEntdeckenIcon, TabFeedIcon, TabSicherIcon } from './Icons';
 
-const TAB_META: Record<string, { label: string; Icon: typeof TabFeedIcon }> = {
-  Feed: { label: 'Feed', Icon: TabFeedIcon },
-  Entdecken: { label: 'Entdecken', Icon: TabEntdeckenIcon },
-  Sicher: { label: 'Sicher', Icon: TabSicherIcon },
+const TAB_META: Record<string, { label: { de: string; en: string }; Icon: typeof TabFeedIcon }> = {
+  Feed: { label: { de: 'Feed', en: 'Feed' }, Icon: TabFeedIcon },
+  Entdecken: { label: { de: 'Entdecken', en: 'Discover' }, Icon: TabEntdeckenIcon },
+  Sicher: { label: { de: 'Sicher', en: 'Safety' }, Icon: TabSicherIcon },
 };
 
 export function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
+  const { lang } = useLang();
 
   return (
     <View
@@ -42,7 +44,7 @@ export function CustomTabBar({ state, navigation }: BottomTabBarProps) {
             style={{ alignItems: 'center', gap: 4 }}
           >
             <meta.Icon size={24} color={color} />
-            <Text style={{ fontFamily: fonts.hanken600, fontSize: 10.5, color }}>{meta.label}</Text>
+            <Text style={{ fontFamily: fonts.hanken600, fontSize: 10.5, color }}>{meta.label[lang]}</Text>
           </Pressable>
         );
       })}

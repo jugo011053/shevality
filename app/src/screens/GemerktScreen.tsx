@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -6,15 +6,16 @@ import { colors } from '../theme/colors';
 import { fonts } from '../theme/fonts';
 import { FeedStackParamList } from '../navigation/types';
 import { useAppState } from '../state/AppState';
+import { useLang } from '../state/LangContext';
 import { FeedCard } from '../components/feed2/FeedCards';
 import { ArchImage } from '../components/ArchImage';
-import { FEED_POSTS, Lang } from '../data/feed';
+import { FEED_POSTS } from '../data/feed';
 import { BUSINESSES } from '../data/constants';
 
 type Props = NativeStackScreenProps<FeedStackParamList, 'Gemerkt'>;
 
 export function GemerktScreen({ navigation }: Props) {
-  const [lang, setLang] = useState<Lang>('de');
+  const { lang } = useLang();
   const { saves } = useAppState();
 
   const savedBusinesses = useMemo(() => BUSINESSES.filter((b) => saves[b.id]), [saves]);
@@ -53,16 +54,7 @@ export function GemerktScreen({ navigation }: Props) {
           <Text style={{ fontFamily: fonts.hanken600, fontSize: 13, color: colors.ink }}>{t.back}</Text>
         </Pressable>
         <Text style={{ fontFamily: fonts.young, fontSize: 20, color: colors.ink }}>{t.title}</Text>
-        <View style={{ flexDirection: 'row', backgroundColor: colors.white, borderRadius: 99, borderWidth: 1, borderColor: colors.cardBorder, padding: 2, minWidth: 70, justifyContent: 'flex-end' }}>
-          {(['de', 'en'] as Lang[]).map((l) => {
-            const active = lang === l;
-            return (
-              <Pressable key={l} onPress={() => setLang(l)} style={{ paddingVertical: 4, paddingHorizontal: 9, borderRadius: 99, backgroundColor: active ? colors.purple : 'transparent' }}>
-                <Text style={{ fontFamily: fonts.hanken700, fontSize: 10.5, color: active ? colors.white : colors.muted }}>{l.toUpperCase()}</Text>
-              </Pressable>
-            );
-          })}
-        </View>
+        <View style={{ minWidth: 70 }} />
       </View>
 
       <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>

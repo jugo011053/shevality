@@ -17,6 +17,8 @@ interface CardCtx {
   onOpenDiscover: () => void;
 }
 
+const APP_URL = 'https://jugo011053.github.io/shevality/';
+
 // ---- geteilte Bausteine -------------------------------------------------
 
 function Eyebrow({ text, color }: { text: string; color: string }) {
@@ -63,34 +65,36 @@ function Footer({ post, lang }: { post: FeedPost; lang: Lang }) {
   };
 
   const onShare = async () => {
-    const text = post.share[lang].join('\n') + '\n\n— shevality';
+    // Wie bei Spotify: das Bild ist der Inhalt, die Nachricht ist nur der Link zur App.
     if (Platform.OS !== 'web') {
-      try { await Share.share({ message: text }); } catch { /* still */ }
+      try { await Share.share({ message: APP_URL }); } catch { /* still */ }
       return;
     }
-    // Web: gestaltetes Marken-Bild erzeugen und teilen (Spotify-Stil).
     const nav: any = typeof navigator !== 'undefined' ? navigator : null;
     const doc: any = typeof document !== 'undefined' ? document : null;
     try {
       const blob = await buildShareImage(post, lang);
       const file = new File([blob], 'shevality.png', { type: 'image/png' });
       if (nav && nav.canShare && nav.canShare({ files: [file] })) {
-        await nav.share({ files: [file], title: 'Shevality' });
+        await nav.share({ files: [file], title: 'shevality', text: APP_URL });
       } else if (doc) {
-        // Kein Datei-Teilen (meist Desktop): Bild herunterladen.
+        // Kein Datei-Teilen (meist Desktop): Bild herunterladen + Link kopieren.
         const url = URL.createObjectURL(blob);
         const a = doc.createElement('a');
         a.href = url;
         a.download = 'shevality.png';
         a.click();
         URL.revokeObjectURL(url);
+        if (nav && nav.clipboard) {
+          try { await nav.clipboard.writeText(APP_URL); } catch { /* egal */ }
+        }
         flash();
       }
     } catch {
-      // Fallback: Text in die Zwischenablage.
+      // Fallback: Link in die Zwischenablage.
       try {
         if (nav && nav.clipboard) {
-          await nav.clipboard.writeText(text);
+          await nav.clipboard.writeText(APP_URL);
           flash();
         }
       } catch {

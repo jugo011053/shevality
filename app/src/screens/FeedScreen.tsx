@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,11 +8,12 @@ import { FeedStackParamList } from '../navigation/types';
 import { Wordmark } from '../components/Wordmark';
 import { FeedCard } from '../components/feed2/FeedCards';
 import { FEED_POSTS, Lang, mixFeed, orderFeed } from '../data/feed';
+import { useLang } from '../state/LangContext';
 
 type Props = NativeStackScreenProps<FeedStackParamList, 'FeedHome'>;
 
 export function FeedScreen({ navigation }: Props) {
-  const [lang, setLang] = useState<Lang>('de');
+  const { lang, setLang } = useLang();
   const posts = useMemo(() => orderFeed(mixFeed(FEED_POSTS)), []);
 
   const ctx = useMemo(

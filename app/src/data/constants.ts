@@ -1,10 +1,23 @@
 import { colors } from '../theme/colors';
+import { Bi } from './feed';
 import { Business, Contact, CritKey, FeedCategory, FeedItem, FeedTabKey } from './types';
 
-export const CRIT: Record<CritKey, { label: string; short: string; basis: string }> = {
-  founded: { label: 'Gegründet von einer Frau', short: 'Gegründet', basis: 'Handelsregister-Eintrag geprüft' },
-  ownership: { label: 'Mehrheitlich in Frauenbesitz', short: 'Frauenbesitz', basis: 'Eigentumsnachweis (> 50 %) geprüft' },
-  leadership: { label: 'Von einer Frau geleitet', short: 'Geleitet', basis: 'Laut Impressum (Leitung / Inhaberin)' },
+export const CRIT: Record<CritKey, { label: Bi; short: Bi; basis: Bi }> = {
+  founded: {
+    label: { de: 'Gegründet von einer Frau', en: 'Founded by a woman' },
+    short: { de: 'Gegründet', en: 'Founded' },
+    basis: { de: 'Handelsregister-Eintrag geprüft', en: 'Verified via commercial register' },
+  },
+  ownership: {
+    label: { de: 'Mehrheitlich in Frauenbesitz', en: 'Majority woman-owned' },
+    short: { de: 'Frauenbesitz', en: 'Woman-owned' },
+    basis: { de: 'Eigentumsnachweis (> 50 %) geprüft', en: 'Ownership (>50%) verified' },
+  },
+  leadership: {
+    label: { de: 'Von einer Frau geleitet', en: 'Led by a woman' },
+    short: { de: 'Geleitet', en: 'Led' },
+    basis: { de: 'Laut Impressum (Leitung / Inhaberin)', en: 'Per legal notice (management/owner)' },
+  },
 };
 
 export const FEED_TABS: { key: FeedTabKey; label: string }[] = [

@@ -7,6 +7,7 @@ import { GemerktScreen } from '../screens/GemerktScreen';
 import { EntdeckenScreen } from '../screens/EntdeckenScreen';
 import { MapScreen } from '../screens/MapScreen';
 import { BusinessDetailScreen } from '../screens/BusinessDetailScreen';
+import { SuggestScreen } from '../screens/SuggestScreen';
 import { SicherScreen } from '../screens/SicherScreen';
 import { CustomTabBar } from '../components/CustomTabBar';
 
@@ -30,6 +31,7 @@ function EntdeckenStackNavigator() {
       <EntdeckenStack.Screen name="EntdeckenHome" component={MapScreen} />
       <EntdeckenStack.Screen name="EntdeckenList" component={EntdeckenScreen} />
       <EntdeckenStack.Screen name="BusinessDetail" component={BusinessDetailScreen} />
+      <EntdeckenStack.Screen name="Suggest" component={SuggestScreen} />
     </EntdeckenStack.Navigator>
   );
 }

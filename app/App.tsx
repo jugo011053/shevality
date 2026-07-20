@@ -14,6 +14,7 @@ import {
 } from '@expo-google-fonts/hanken-grotesk';
 import { colors } from './src/theme/colors';
 import { AppStateProvider } from './src/state/AppState';
+import { LangProvider } from './src/state/LangContext';
 import { RootNavigator } from './src/navigation/RootNavigator';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -39,9 +40,11 @@ export default function App() {
     <View style={{ flex: 1, backgroundColor: colors.bg }} onLayout={onLayout}>
       <SafeAreaProvider>
         <AppStateProvider>
-          <NavigationContainer>
-            <RootNavigator />
-          </NavigationContainer>
+          <LangProvider>
+            <NavigationContainer>
+              <RootNavigator />
+            </NavigationContainer>
+          </LangProvider>
         </AppStateProvider>
       </SafeAreaProvider>
       <StatusBar style="dark" />

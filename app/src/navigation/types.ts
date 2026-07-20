@@ -10,6 +10,7 @@ export type EntdeckenStackParamList = {
   EntdeckenHome: undefined; // Karte (Standard-Ansicht)
   EntdeckenList: undefined; // Liste
   BusinessDetail: { id: string };
+  Suggest: undefined; // Geschäft vorschlagen
 };
 
 export type SicherStackParamList = {

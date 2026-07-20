@@ -10,12 +10,31 @@ import { Business, CritKey } from '../data/types';
 import { EntdeckenStackParamList } from '../navigation/types';
 import { ArchImage } from '../components/ArchImage';
 import { SearchIcon } from '../components/Icons';
+import { useLang } from '../state/LangContext';
 
 type Props = NativeStackScreenProps<EntdeckenStackParamList, 'EntdeckenList'>;
 
 const CRIT_KEYS = Object.keys(CRIT) as CritKey[];
 
+const T = {
+  title: { de: 'Entdecken', en: 'Discover' },
+  tagline: { de: 'Frauengeführt in Frankfurt', en: 'Women-led in Frankfurt' },
+  map: { de: 'Karte', en: 'Map' },
+  searchPlaceholder: { de: 'Geschäft, Stadtteil …', en: 'Business, neighbourhood …' },
+  loading: { de: 'Lädt aus der Datenbank …', en: 'Loading from the database …' },
+  fullyVerified: { de: 'Voll verifiziert', en: 'Fully verified' },
+  listed: { de: 'Gelistet', en: 'Listed' },
+  unverified: { de: 'ungeprüft', en: 'unverified' },
+  noResults: { de: 'Keine Treffer mit diesen Filtern.', en: 'No matches with these filters.' },
+  placeOne: { de: 'Ort', en: 'place' },
+  placeMany: { de: 'Orte', en: 'places' },
+  ctaTitle: { de: 'Kennst du einen Laden, der fehlt?', en: 'Know a place that’s missing?' },
+  ctaButton: { de: 'Vorschlagen →', en: 'Suggest it →' },
+};
+
 export function EntdeckenScreen({ navigation }: Props) {
+  const { lang } = useLang();
+  const t = (o: { de: string; en: string }) => o[lang];
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<Record<CritKey, boolean>>({ founded: false, ownership: false, leadership: false });
   // null = wird noch aus der Datenbank geladen
@@ -50,13 +69,13 @@ export function EntdeckenScreen({ navigation }: Props) {
           .filter((b) => b.neighborhood === n)
           .map((b) => {
             const met = CRIT_KEYS.filter((k) => b.crit[k]);
-            const verifLabel = met.length === 3 ? 'Voll verifiziert' : met.length ? CRIT[met[0]].short : 'Gelistet';
+            const verifLabel = met.length === 3 ? t(T.fullyVerified) : met.length ? CRIT[met[0]].short[lang] : t(T.listed);
             return { ...b, verifLabel };
           });
-        return { neighborhood: n, count: `${items.length} ${items.length === 1 ? 'Ort' : 'Orte'}`, items };
+        return { neighborhood: n, count: `${items.length} ${items.length === 1 ? t(T.placeOne) : t(T.placeMany)}`, items };
       })
       .filter((g) => g.items.length > 0);
-  }, [query, filters, businesses]);
+  }, [query, filters, businesses, lang]);
 
   const loading = businesses === null;
 
@@ -65,15 +84,15 @@ export function EntdeckenScreen({ navigation }: Props) {
       <View style={{ paddingHorizontal: 24, paddingTop: 10 }}>
         <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontFamily: fonts.young, fontSize: 32, color: colors.ink, letterSpacing: -0.32 }}>Entdecken</Text>
-            <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 14, color: colors.pink, marginTop: 6 }}>Frauengeführt in Frankfurt</Text>
+            <Text style={{ fontFamily: fonts.young, fontSize: 32, color: colors.ink, letterSpacing: -0.32 }}>{t(T.title)}</Text>
+            <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 14, color: colors.pink, marginTop: 6 }}>{t(T.tagline)}</Text>
           </View>
           <Pressable
             onPress={() => navigation.navigate('EntdeckenHome')}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 9, paddingHorizontal: 14, borderRadius: 99, backgroundColor: colors.purple, marginTop: 4 }}
           >
             <Text style={{ fontSize: 13 }}>🗺️</Text>
-            <Text style={{ fontFamily: fonts.hanken600, fontSize: 12.5, color: colors.white }}>Karte</Text>
+            <Text style={{ fontFamily: fonts.hanken600, fontSize: 12.5, color: colors.white }}>{t(T.map)}</Text>
           </Pressable>
         </View>
 
@@ -95,7 +114,7 @@ export function EntdeckenScreen({ navigation }: Props) {
           <TextInput
             value={query}
             onChangeText={setQuery}
-            placeholder="Geschäft, Stadtteil …"
+            placeholder={t(T.searchPlaceholder)}
             placeholderTextColor={colors.mutedLighter}
             style={{ flex: 1, fontFamily: fonts.hanken400, fontSize: 14, color: colors.ink }}
           />
@@ -118,7 +137,7 @@ export function EntdeckenScreen({ navigation }: Props) {
                 backgroundColor: active ? colors.purple : colors.white,
               }}
             >
-              <Text style={{ fontFamily: fonts.hanken600, fontSize: 12.5, color: active ? colors.white : colors.muted }}>{CRIT[k].short}</Text>
+              <Text style={{ fontFamily: fonts.hanken600, fontSize: 12.5, color: active ? colors.white : colors.muted }}>{CRIT[k].short[lang]}</Text>
             </Pressable>
           );
         })}
@@ -128,7 +147,7 @@ export function EntdeckenScreen({ navigation }: Props) {
         {loading && (
           <View style={{ alignItems: 'center', paddingVertical: 48, gap: 12 }}>
             <ActivityIndicator color={colors.purple} />
-            <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 14, color: colors.mutedLight }}>Lädt aus der Datenbank …</Text>
+            <Text style={{ fontFamily: fonts.instrumentItalic, fontSize: 14, color: colors.mutedLight }}>{t(T.loading)}</Text>
           </View>
         )}
         {groups.map((g) => (
@@ -160,7 +179,7 @@ export function EntdeckenScreen({ navigation }: Props) {
                         <View style={{ width: 14, height: 14, borderRadius: 7, borderWidth: 1.2, borderColor: '#C79A4B', alignItems: 'center', justifyContent: 'center' }}>
                           <Text style={{ fontSize: 8, color: '#C79A4B' }}>?</Text>
                         </View>
-                        <Text style={{ fontFamily: fonts.hanken500, fontSize: 10.5, color: '#B0812F' }}>{b.verifLabel} · ungeprüft</Text>
+                        <Text style={{ fontFamily: fonts.hanken500, fontSize: 10.5, color: '#B0812F' }}>{b.verifLabel} · {t(T.unverified)}</Text>
                       </>
                     ) : (
                       <>
@@ -179,8 +198,20 @@ export function EntdeckenScreen({ navigation }: Props) {
         ))}
         {!loading && groups.length === 0 && (
           <Text style={{ textAlign: 'center', paddingVertical: 40, paddingHorizontal: 20, fontFamily: fonts.hanken400, fontSize: 14, color: colors.mutedLight }}>
-            Keine Treffer mit diesen Filtern.
+            {t(T.noResults)}
           </Text>
+        )}
+
+        {!loading && (
+          <View style={{ marginTop: 20, borderRadius: 20, borderWidth: 1, borderColor: colors.cardBorder, backgroundColor: colors.white, padding: 18, alignItems: 'center' }}>
+            <Text style={{ fontFamily: fonts.young, fontSize: 16, color: colors.ink, textAlign: 'center' }}>{t(T.ctaTitle)}</Text>
+            <Pressable
+              onPress={() => navigation.navigate('Suggest')}
+              style={{ marginTop: 12, paddingVertical: 10, paddingHorizontal: 18, borderRadius: 22, backgroundColor: colors.purple }}
+            >
+              <Text style={{ fontFamily: fonts.hanken600, fontSize: 13, color: colors.white }}>{t(T.ctaButton)}</Text>
+            </Pressable>
+          </View>
         )}
       </ScrollView>
     </SafeAreaView>
